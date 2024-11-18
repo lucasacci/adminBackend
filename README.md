@@ -85,3 +85,7 @@ Body:
   "fechaCaducidad": ""
 }
 ```
+
+### Buscar Descuentos
+
+Path: /descuentos?onlyValid={true or false}
