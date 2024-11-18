@@ -83,8 +83,7 @@ Body:
   "nombre": "",
   "apellido": "",
   "email": "",
-  "direccion": "",
-  "idGerente": ""
+  "direccion": ""
 }
 ```
 
