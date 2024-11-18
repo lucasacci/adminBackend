@@ -33,7 +33,7 @@ public class VendedorService {
         vendedorEditado.setCorreo(vendedor.getCorreo());
         vendedorEditado.setDni(vendedor.getDni());
         vendedorEditado.setId_gerente(vendedor.getId_gerente());
-        vendedorEditado.setRecibos(vendedor.getRecibos());
+        vendedorEditado.setVentas(vendedor.getVentas());
         vendedorEditado.setApellido(vendedor.getApellido());
 
         return vendedorRepository.save(vendedorEditado);

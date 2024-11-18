@@ -1,33 +1,32 @@
 package com.apirest.apiadmin.services;
 
-import com.apirest.apiadmin.models.ClientModel;
-import com.apirest.apiadmin.models.ProductoModel;
-import com.apirest.apiadmin.models.ReciboModel;
-import com.apirest.apiadmin.repositories.IReciboRepository;
+import com.apirest.apiadmin.models.VentaModel;
+import com.apirest.apiadmin.repositories.IVentaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
-public class ReciboService {
+public class VentaService {
 
-    IReciboRepository reciboRepository;
+    @Autowired
+    IVentaRepository ventaRepository;
 
-    public ReciboModel guardarRecibo(ReciboModel recibo) {
-        return reciboRepository.save(recibo);
+    public VentaModel guardarVenta(VentaModel venta) {
+        return ventaRepository.save(venta);
     }
 
-    public List<ReciboModel> listarRecibos() {
-        return reciboRepository.findAll();
+    public List<VentaModel> listarventas() {
+        return ventaRepository.findAll();
     }
 
+    /*
     public String generarRecibo() {
         int numero = 0;
         String numeroFinalRecibo = "";
 
-        List<ReciboModel> recibos = listarRecibos();
+        List<VentaModel> recibos = listarRecibos();
 
         List<Integer> numeros = new ArrayList<Integer>();
 
@@ -50,7 +49,7 @@ public class ReciboService {
 
         return numeroFinalRecibo;
     }
-
+    */
 
 
 

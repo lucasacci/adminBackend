@@ -34,7 +34,7 @@ public class ClientService {
         clienteEditado.setNombre(cliente.getNombre());
         clienteEditado.setApellido(cliente.getApellido());
         clienteEditado.setDni(cliente.getDni());
-        clienteEditado.setCorreo(cliente.getCorreo());
+        clienteEditado.setEmail(cliente.getEmail());
 
         return clientRepository.save(clienteEditado);
     }
