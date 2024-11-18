@@ -71,6 +71,23 @@ Body:
 }
 ```
 
+# Clientes
+### Alta Clientes
+
+Path: /clientes
+
+Body:
+```json
+{
+  "dni": "",
+  "nombre": "",
+  "apellido": "",
+  "email": "",
+  "direccion": "",
+  "idGerente": ""
+}
+```
+
 # Descuentos
 ### Alta Descuento
 
