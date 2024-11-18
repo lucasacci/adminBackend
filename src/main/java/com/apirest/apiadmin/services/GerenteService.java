@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class GerenteService {
@@ -21,8 +22,20 @@ public class GerenteService {
         return gerenteRepository.findById(id).get();
     }
 
-    public GerenteModel guardarGerente(GerenteModel gerente){
-        return gerenteRepository.save(gerente);
+    public Optional<GerenteModel> getGerenteByDNI(String dniGerente){
+        return gerenteRepository.findByDni(dniGerente);
+    }
+
+    public String guardarGerente(GerenteModel gerente){
+        try {
+            if(getGerenteByDNI(gerente.getDni()).isPresent()) {
+                return "Gerente ya existente. DNI: " + gerente.getDni();
+            }
+            gerenteRepository.save(gerente);
+            return "Gerente Registrado Correctamente.";
+        } catch (Exception e) {
+            return "Error al registrar el gerente. Ex: " + e.getMessage();
+        }
     }
 
     public GerenteModel editGerente(GerenteModel gerente, Long id){
@@ -32,6 +45,7 @@ public class GerenteService {
         gerenteEditado.setApellido(gerente.getApellido());
         gerenteEditado.setEmail(gerente.getEmail());
         gerenteEditado.setDni(gerente.getDni());
+        gerenteEditado.setDireccion(gerente.getDireccion());
 
         return gerenteRepository.save(gerenteEditado);
     }
