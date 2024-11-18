@@ -31,7 +31,6 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El id del producto y la cantidad son obligatorios.");
         }
 
-        reciboService.obtenerProducto(producto);
         // Obtener el producto
         ProductoModel producto_db = productoService.getProducto(producto.getIdProducto());
         int cantidad = producto.getCantidad();

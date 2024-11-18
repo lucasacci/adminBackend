@@ -12,48 +12,38 @@ public class GerenteModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private long id_gerente;
+
+    @Column
+    private String dni;
+
     @Column
     private String nombre;
+
     @Column
     private String apellido;
+
     @Column
     private String email;
+
     @Column
-    private int dni;
+    private String direccion;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id_gerente")
-    private List<VendedorModel> vendedorModelList;
-
-    public long getId_gerente() {
-        return id_gerente;
-    }
-
-    public void setId_gerente(long id_gerente) {
-        this.id_gerente = id_gerente;
-    }
-
-    public List<VendedorModel> getVendedorModelList() {
-        return vendedorModelList;
-    }
-
-    public void setVendedorModelList(List<VendedorModel> vendedorModelList) {
-        this.vendedorModelList = vendedorModelList;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
+    public GerenteModel(String dni, String nombre, String apellido, String email, String direccion) {
+        this.dni = dni;
+        this.nombre = nombre;
         this.apellido = apellido;
+        this.email = email;
+        this.direccion = direccion;
+    }
+
+    public GerenteModel(){}
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public String getNombre() {
@@ -64,11 +54,27 @@ public class GerenteModel {
         this.nombre = nombre;
     }
 
-    public int getDni() {
-        return dni;
+    public String getApellido() {
+        return apellido;
     }
 
-    public void setDni(int dni) {
-        this.dni = dni;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 }

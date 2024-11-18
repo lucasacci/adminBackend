@@ -1,7 +1,11 @@
 package com.apirest.apiadmin.controllers;
 
+import com.apirest.apiadmin.DTO.ApiResponse;
+import com.apirest.apiadmin.helpers.JsonParser;
 import com.apirest.apiadmin.models.GerenteModel;
 import com.apirest.apiadmin.services.GerenteService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/gerentes")
-public class GerenteController {
+public class GerenteRestController {
 
     @Autowired
     private GerenteService gerenteService;
@@ -33,11 +37,32 @@ public class GerenteController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping("/crearGerente")
-    public ResponseEntity<String> crearGerente(@RequestBody GerenteModel gerente) {
-        gerenteService.guardarGerente(gerente);
+    @PostMapping("/add")
+    public ResponseEntity<JsonNode> crearGerente(@RequestBody JsonNode jsonGerente) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Gerente creado con exito.");
+        try {
+            GerenteModel gerente = JsonParser.gerenteFromJson(jsonGerente);
+            String responseGerente = gerenteService.guardarGerente(gerente);
+
+
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    HttpStatus.OK.value(),
+                    responseGerente,
+                    new ObjectMapper().createObjectNode()
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Error al Crear Gerente: " + ex.getMessage(),
+                    null);
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/{id}")
