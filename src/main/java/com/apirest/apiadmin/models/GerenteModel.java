@@ -38,6 +38,10 @@ public class GerenteModel {
 
     public GerenteModel(){}
 
+    public long getId_gerente() {
+        return id_gerente;
+    }
+
     public String getDni() {
         return dni;
     }
