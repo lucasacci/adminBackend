@@ -18,11 +18,11 @@ public class ClientModel {
     @Column
     private String apellido;
     @Column
-    private String correo;
+    private String email;
     @Column
     private int dni;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id_cliente")
-    private List<ReciboModel> ReciboModelList;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cliente")
+    private List<VentaModel> ventas;
 
 
     public long getId_cliente() {
@@ -41,12 +41,12 @@ public class ClientModel {
         this.dni = dni;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getApellido() {

@@ -3,10 +3,11 @@ package com.apirest.apiadmin.controllers;
 import com.apirest.apiadmin.DTO.ApiResponse;
 import com.apirest.apiadmin.helpers.JsonParser;
 import com.apirest.apiadmin.models.DescuentoModel;
+import com.apirest.apiadmin.models.GerenteModel;
 import com.apirest.apiadmin.services.DescuentosService;
+import com.apirest.apiadmin.services.GerenteService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.jfr.Frequency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,14 @@ public class DescuentoRestController {
     @Autowired
     private DescuentosService descuentosService;
 
-    @PostMapping("/add")
-    public ResponseEntity<JsonNode> addDescuento(@RequestBody JsonNode jsonDescuento){
+    @Autowired
+    private GerenteService gerenteService;
+
+    @PostMapping("/add/{idGerente}")
+    public ResponseEntity<JsonNode> addDescuento(@PathVariable Long idGerente, @RequestBody JsonNode jsonDescuento){
         try {
-            DescuentoModel descuento = JsonParser.descuentoFromJson(jsonDescuento);
+            GerenteModel gerente = gerenteService.getGerente(idGerente);
+            DescuentoModel descuento = JsonParser.descuentoFromJson(jsonDescuento, gerente);
             String responseDescuento = descuentosService.saveDescuento(descuento);
 
             ApiResponse<JsonNode> response = new ApiResponse<>(
@@ -46,14 +51,19 @@ public class DescuentoRestController {
     }
 
     @GetMapping
-    public ResponseEntity<JsonNode> getDescuentos() {
+    public ResponseEntity<JsonNode> getDescuentos(@RequestParam Boolean onlyValid ) {
+
         List<DescuentoModel> descuentos = descuentosService.getDescuentos();
         List<JsonNode> descuentosJson = new ArrayList<>();
 
         try {
             descuentos.forEach(
             descuentoModel -> {
-                descuentosJson.add(JsonParser.descuentosToJson(descuentoModel));
+                if (onlyValid.equals(true) && descuentoModel.isValid()){
+                    descuentosJson.add(JsonParser.descuentosToJson(descuentoModel));
+                } else if (onlyValid.equals(false)){
+                    descuentosJson.add(JsonParser.descuentosToJson(descuentoModel));
+                }
             });
 
             ApiResponse<List<JsonNode>> response = new ApiResponse<>(

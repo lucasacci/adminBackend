@@ -3,7 +3,6 @@ package com.apirest.apiadmin.helpers;
 import com.apirest.apiadmin.DTO.ApiResponse;
 import com.apirest.apiadmin.models.DescuentoModel;
 import com.apirest.apiadmin.models.GerenteModel;
-import com.apirest.apiadmin.services.GerenteService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -34,24 +33,17 @@ public class JsonParser {
         return mapper.valueToTree(response);
     }
 
-    public static DescuentoModel descuentoFromJson(JsonNode json) {
+    public static DescuentoModel descuentoFromJson(JsonNode json, GerenteModel gerente) {
         String descripcion         = json.get("descripcion").asText();
         String porcentajeDescuento = json.get("porcentajeDescuento").asText();
 
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date fechaCaducidad = null;
         try {
             fechaCaducidad = formatoFecha.parse(json.get("fechaCaducidad").asText());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        Long idGerente = json.get("idGerente").asLong();
-
-        GerenteService gerenteService = new GerenteService();
-        gerenteService.getGerentes();
-
-        GerenteModel gerente = gerenteService.getGerente(idGerente);
 
         DescuentoModel descuento = new DescuentoModel(
                 descripcion,
@@ -73,5 +65,36 @@ public class JsonParser {
         json.put("idGerente", descuentoModel.getGerente().getId_gerente());
 
         return json;
+    }
+
+    public static Date DateHeaderVentaFromJson(JsonNode json) {
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date fechaVenta = null;
+        try {
+            fechaVenta = formatoFecha.parse(json.get("fechaVenta").asText());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return fechaVenta;
+    }
+
+    public static Double montoTotalHeaderVentaFromJson(JsonNode json) {
+        return json.get("montoTotal").asDouble();
+    }
+
+    public static Long vendorIdHeaderVentaFromJson(JsonNode json) {
+        return json.get("idVendedor").asLong();
+    }
+
+    public static Long clientIdHeaderVentaFromJson(JsonNode json) {
+        return json.get("idCliente").asLong();
+    }
+
+    public static int getLineasDeVentaFromJson(JsonNode json) {
+       return json.get("lineasDeVenta").size();
+    }
+
+    public static Integer getProductIDVentaFromJson(JsonNode json, Integer i) {
+        return json.get("lineasDeVenta").get(i).get("idProducto").asInt();
     }
 }

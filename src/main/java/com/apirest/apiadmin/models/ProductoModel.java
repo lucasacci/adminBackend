@@ -2,8 +2,6 @@ package com.apirest.apiadmin.models;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "productos")
 public class ProductoModel {
@@ -23,10 +21,6 @@ public class ProductoModel {
     private String categoria;
     @Column
     private String imagen;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_recibo")
-    private ReciboModel id_recibo;
 
 //    public int getCantidad() {
 //        return cantidad;

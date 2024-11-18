@@ -24,8 +24,8 @@ public class VendedorModel {
     @JoinColumn(name = "id_gerente")
     private GerenteModel id_gerente;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id_vendedor")
-    private List<ReciboModel> recibos;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "vendedor")
+    private List<VentaModel> ventas;
 
     public long getId_vendedor() {
         return id_vendedor;
@@ -35,12 +35,12 @@ public class VendedorModel {
         this.id_vendedor = id_vendedor;
     }
 
-    public List<ReciboModel> getRecibos() {
-        return recibos;
+    public List<VentaModel> getVentas() {
+        return ventas;
     }
 
-    public void setRecibos(List<ReciboModel> recibos) {
-        this.recibos = recibos;
+    public void setVentas(List<VentaModel> ventas) {
+        this.ventas = ventas;
     }
 
     public GerenteModel getId_gerente() {
