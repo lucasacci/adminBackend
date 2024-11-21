@@ -1,11 +1,13 @@
 package com.apirest.apiadmin.models;
 
+import com.apirest.apiadmin.listeners.AuditLineVentaModel;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "lineaDeVenta")
+@EntityListeners(AuditLineVentaModel.class)
 public class LineVentaModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
