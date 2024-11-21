@@ -1,7 +1,6 @@
 # Ventas
-### Crear venta
 
-POST
+### POST
 Path: /ventas/create
 
 Body:
@@ -13,129 +12,184 @@ Body:
   "montoTotal": "",
   "lineasDeVenta": [
     {
-    "idProducto": "producto 1"
+    "idProducto": "id"
   }, 
     {
-    "idProducto": "producto 2"
+    "idProducto": "id"
   }]
 }
 ```
 
-
 Response:
 ```json
 {
-    "status": 201, //este no deberia estar, lo sacaremos
-    "message": "Venta Generada exitosamente",
-    "data": null
+  "message": "Venta Generada exitosamente",
+  "data": null
 }
 ```
 
 # Servicios
-### Alta Servicios
 
-GET
+### GET
 Path: /productos
 
 Response:
 ```json
-[
+{
+  "message": "Listado Productos.",
+  "data": [
     {
-        "id_producto": 1,
-        "nombre": "Un programa",
-        "precio": 30000.0,
-        "stock": 0,
-        "categoria": "hola",
-        "imagen": null
+      "id_producto": 1,
+      "nombre": "Un programa 1",
+      "precio": "40000.0",
+      "categoria": "hola",
+      "comentarios": "Tiempo de vida: 2 anios",
+      "id_gerente": 1
     },
     {
-        "id_producto": 2,
-        "nombre": "Un programa 2",
-        "precio": 40000.0,
-        "stock": 0,
-        "categoria": "hola",
-        "imagen": null
+      "id_producto": 2,
+      "nombre": "Un programa 2",
+      "precio": "40000.0",
+      "categoria": "hola",
+      "comentarios": "Tiempo de vida: 3 anios",
+      "id_gerente": 1
     }
-]
+  ]
+}
 ```
 
-GET
+### GET
 Path: /productos/:id
 
 Response:
 ```json
 {
-    "id_producto": 1,
-    "nombre": "Un programa",
-    "precio": 30000.0,
-    "stock": 0,
-    "categoria": "hola",
-    "imagen": null
+  "id_producto": 1,
+  "nombre": "Un programa 2",
+  "precio": 40000.0,
+  "stock": 0,
+  "categoria": "hola",
+  "imagen": null,
+  "gerente": {
+    "id_gerente": 1,
+    "dni": "42949906",
+    "nombre": "Jeremias",
+    "apellido": "Moreno Ivanoff",
+    "email": "jeremiasivanoff@hotmail.es",
+    "direccion": "avenida Belgrano 1779",
+    "dateEvent": "2024-11-21T19:31:22.350062",
+    "operation": "INSERT"
+  },
+  "dateEvent": "2024-11-21T19:33:08.115576",
+  "operation": "INSERT"
 }
 ```
 
-POST
+### POST
 Path: /productos/crearproducto
 
 Body:
 ```json
 {
-  "nombre": "",
-  "categoria": "",
-  "precio": "",
-  "idGerente": "",
-  "tiempoFinSoporte": ""
+  "categoria": "hola",
+  "nombre": "Un programa 1",
+  "precio": 40000,
+  "comentarios": "Tiempo de vida: 2 anios",
+  "id_gerente": "1"
 }
 ```
 
-Response: //Se cambiara a un json
+Response:
 ```json
-Producto creado con exito.
+{
+  "message": "Producto generado exitosmaente.",
+  "data": null
+}
 ```
 
 
 # Vendedores
-### Alta Vendedores
 
-GET
+### GET
 Path: /vendedores
 
 Response: //esto se cambiara a que devuelva como json
 ```json
 [
-    {
-        "id_vendedor": 1,
-        "nombre": "Jeremias",
-        "apellido": "Moreno Ivanoff",
-        "correo": "jeremiasivanoff@hotmail.es",
-        "dni": 42939904,
-        "id_gerente": null,
-        "ventas": [
-            {}
-        ]
-    }
+  {
+    "id_vendedor": 1,
+    "nombre": "Jeremias",
+    "apellido": "Moreno Ivanoff",
+    "correo": "jeremiasivanoff@hotmail.es",
+    "dni": 41949302,
+    "direccion": "avenida an4sdfo 3423479",
+    "id_gerente": {
+      "id_gerente": 1,
+      "dni": "42949906",
+      "nombre": "Jeremias",
+      "apellido": "Moreno Ivanoff",
+      "email": "jeremiasivanoff@hotmail.es",
+      "direccion": "avengrano 89779",
+      "dateEvent": "2024-11-21T19:47:46.743386",
+      "operation": "INSERT"
+    },
+    "ventas": [],
+    "dateEvent": "2024-11-21T19:53:26.069321",
+    "operation": "INSERT"
+  },
+  {
+    "id_vendedor": 2,
+    "nombre": "Esteban",
+    "apellido": "sanchez",
+    "correo": "joff@hotmail.es",
+    "dni": 0,
+    "direccion": "rivadavia 79",
+    "id_gerente": {
+      "id_gerente": 1,
+      "dni": "42949906",
+      "nombre": "Jeremias",
+      "apellido": "Moreno Ivanoff",
+      "email": "jeremiasivanoff@hotmail.es",
+      "direccion": "avengrano 89779",
+      "dateEvent": "2024-11-21T19:47:46.743386",
+      "operation": "INSERT"
+    },
+    "ventas": [],
+    "dateEvent": "2024-11-21T19:55:09.894283",
+    "operation": "INSERT"
+  }
 ]
 ```
 
-GET
+### GET
 Path: /vendedores/:id
 
 Response:
 ```json
 {
-    "id_vendedor": 1,
+  "id_vendedor": 1,
+  "nombre": "Jeremias",
+  "apellido": "Moreno Ivanoff",
+  "correo": "jeremiasivanoff@hotmail.es",
+  "dni": 41949302,
+  "direccion": "avenida an4sdfo 3423479",
+  "id_gerente": {
+    "id_gerente": 1,
+    "dni": "42949906",
     "nombre": "Jeremias",
     "apellido": "Moreno Ivanoff",
-    "correo": "jeremiasivanoff@hotmail.es",
-    "dni": 42939904,
-    "id_gerente": null,
-    "ventas": [
-        {}
-    ]
+    "email": "jeremiasivanoff@hotmail.es",
+    "direccion": "avengrano 89779",
+    "dateEvent": "2024-11-21T19:47:46.743386",
+    "operation": "INSERT"
+  },
+  "ventas": [],
+  "dateEvent": "2024-11-21T19:53:26.069321",
+  "operation": "INSERT"
 }
 ```
 
-POST
+### POST
 Path: /vendedores/crearvendedor
 
 Body:
@@ -146,19 +200,21 @@ Body:
   "apellido": "",
   "email": "",
   "direccion": "",
-  "idGerente": ""
+  "id_gerente": ""
 }
 ```
 
-Response: //Esto se va cambiar a un json
+Response:
 ```json
-Vendedor creado con exito.
+{
+  "message": "Vendedor registrador exitosamente.",
+  "data": null
+}
 ```
 
 # Gerentes
-### Alta Gerentes
 
-POST:
+### POST:
 Path: /gerentes/add
 
 Body:
@@ -175,80 +231,185 @@ Body:
 Response ej:
 ```json
 {
-    "status": 200,// AHora recibe este status, pero lo voy a sacar
-    "message": "Gerente Registrado Correctamente.",
-    "data": {}
+  "message": "Gerente Registrado Correctamente.",
+  "data": {}
 }
 ```
 
-GET
+### GET
 Path: /gerentes
 
 Response ej: //Este tengo que corregirlo para que lo devuelva en json
 ```json
 [
-    {
-        "id_gerente": 1,
-        "dni": "42939901",
-        "nombre": "Jeremias",
-        "apellido": "Moreno Ivanoff",
-        "email": "jeremiasivanoff@hotmail.es",
-        "direccion": "avenida Belgrano 1779"
-    },
-    {
-        "id_gerente": 2,
-        "dni": "42939900",
-        "nombre": "Jeremias",
-        "apellido": "Moreno Ivanoff",
-        "email": "jeremiasivanoff@hotmail.es",
-        "direccion": "avenida Belgrano 1779"
-    },
-    {
-        "id_gerente": 3,
-        "dni": "42939904",
-        "nombre": "Jeremias",
-        "apellido": "Moreno Ivanoff",
-        "email": "jeremiasivanoff@hotmail.es",
-        "direccion": "avenida Belgrano 1779"
-    }
+  {
+    "id_gerente": 1,
+    "dni": "42949906",
+    "nombre": "Jeremias",
+    "apellido": "Moreno Ivanoff",
+    "email": "jeremiasivanoff@hotmail.es",
+    "direccion": "avenida Be3123179",
+    "dateEvent": "2024-11-21T19:47:46.743386",
+    "operation": "INSERT"
+  },
+  {
+    "id_gerente": 2,
+    "dni": "42942329906",
+    "nombre": "Jeremias",
+    "apellido": "Moreno Ivanoff",
+    "email": "jeremiasivanoff@hotmail.es",
+    "direccion": "avenida Be6756 79",
+    "dateEvent": "2024-11-21T19:57:38.228956",
+    "operation": "INSERT"
+  }
 ]
 ```
 
-GET
+### GET
 Path: /gerentes/:id
 
 Response ej:
 ```json
 {
-    "id_gerente": 1,
-    "dni": "42939901",
-    "nombre": "Jeremias",
-    "apellido": "Moreno Ivanoff",
-    "email": "jeremiasivanoff@hotmail.es",
-    "direccion": "avenida Belgrano 1779"
+  "id_gerente": 2,
+  "dni": "42942329906",
+  "nombre": "Jeremias",
+  "apellido": "Moreno Ivanoff",
+  "email": "jeremiasivanoff@hotmail.es",
+  "direccion": "avenida Be6756 79",
+  "dateEvent": "2024-11-21T19:57:38.228956",
+  "operation": "INSERT"
 }
 ```
 
 # Clientes
-### Alta Clientes
 
+### GET
+Path: /clientes
+
+Response: //Este tengo que corregirlo para que lo devuelva en json y quitaria que venga toda la info del vendedor, que directamente ponga el id nomas
+```json
+[
+    {
+        "id_cliente": 1,
+        "nombre": "Jeremias",
+        "apellido": "Moreno Ivanoff",
+        "email": "jeremiasivanoff@hotmail.es",
+        "dni": 429323902,
+        "ventas": [],
+        "vendedor": {
+          "id_vendedor": 1,
+          "nombre": "Jeremias",
+          "apellido": "Moreno Ivanoff",
+          "correo": "jeremiasivanoff@hotmail.es",
+          "dni": 41949302,
+          "direccion": "avenida an4sdfo 3423479",
+          "id_gerente": {
+            "id_gerente": 1,
+            "dni": "42949906",
+            "nombre": "Jeremias",
+            "apellido": "Moreno Ivanoff",
+            "email": "jeremiasivanoff@hotmail.es",
+            "direccion": "avengrano 89779",
+            "dateEvent": "2024-11-21T19:47:46.743386",
+            "operation": "INSERT"
+          },
+          "ventas": [],
+          "dateEvent": "2024-11-21T19:53:26.069321",
+          "operation": "INSERT"
+        },
+        "dateEvent": "2024-11-21T20:01:03.850616",
+        "operation": "INSERT"
+    },
+    {
+        "id_cliente": 2,
+        "nombre": "Esteban",
+        "apellido": "Rocha",
+        "email": "jereasdassivanoff@hotmail.es",
+        "dni": 429312312,
+        "ventas": [],
+        "vendedor":{
+          "id_vendedor": 1,
+          "nombre": "Jeremias",
+          "apellido": "Moreno Ivanoff",
+          "correo": "jeremiasivanoff@hotmail.es",
+          "dni": 41949302,
+          "direccion": "avenida an4sdfo 3423479",
+          "id_gerente": {
+            "id_gerente": 1,
+            "dni": "42949906",
+            "nombre": "Jeremias",
+            "apellido": "Moreno Ivanoff",
+            "email": "jeremiasivanoff@hotmail.es",
+            "direccion": "avengrano 89779",
+            "dateEvent": "2024-11-21T19:47:46.743386",
+            "operation": "INSERT"
+          },
+          "ventas": [],
+          "dateEvent": "2024-11-21T19:53:26.069321",
+          "operation": "INSERT"
+        },
+        "dateEvent": "2024-11-21T20:02:07.749219",
+        "operation": "INSERT"
+    }
+]
+```
+
+### GET
+Path: /clientes/:id
+
+Response: //Este tengo que corregirlo para que lo devuelva en json y quitaria que venga toda la info del vendedor, que directamente ponga el id nomas
+```json
+{
+    "id_producto": 1,
+    "nombre": "Un programa 1",
+    "precio": 40000.0,
+    "stock": 0,
+    "categoria": "hola",
+    "comentarios": "Tiempo de vida: 2 anios",
+    "imagen": null,
+    "gerente": {
+      "id_gerente": 1,
+      "dni": "42949906",
+      "nombre": "Jeremias",
+      "apellido": "Moreno Ivanoff",
+      "email": "jeremiasivanoff@hotmail.es",
+      "direccion": "avenida Be3123179",
+      "dateEvent": "2024-11-21T19:47:46.743386",
+      "operation": "INSERT"
+    },
+    "dateEvent": "2024-11-21T19:47:51.320708",
+    "operation": "INSERT"
+}
+```
+
+### POST
 Path: /clientes
 
 Body:
 ```json
 {
-  "dni": "",
-  "nombre": "",
-  "apellido": "",
-  "email": "",
-  "direccion": ""
+  "dni": "429323902",
+  "nombre": "Jeremias",
+  "apellido": "Moreno Ivanoff",
+  "email": "jeremiasivanoff@hotmail.es",
+  "direccion": "avenida Be2312779",
+  "idVendedor": "1"
+}
+```
+
+Response:
+```json
+{
+    "message": "Cliente Registrado Correctamente.",
+    "data": null
 }
 ```
 
 # Descuentos
-### Alta Descuento
 
-Path: /descuentos
+### POST
+Path: /descuentos/add/:idGerente
 
 Body:
 ```json
