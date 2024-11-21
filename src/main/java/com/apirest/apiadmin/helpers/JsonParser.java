@@ -133,7 +133,7 @@ public class JsonParser {
 
         json.put("id_producto", productoModel.getId_producto());
         json.put("nombre", productoModel.getNombre());
-        json.put("precio", productoModel.getPrecio());
+        json.put("precio", productoModel.getPrecio()).asDouble();
         json.put("categoria", productoModel.getCategoria());
         json.put("comentarios", productoModel.getComentarios());
         json.put("id_gerente", productoModel.getGerente().getId_gerente());
