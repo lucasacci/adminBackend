@@ -13,21 +13,19 @@ Body:
   "montoTotal": "",
   "lineasDeVenta": [
     {
-    "idProducto": "producto 1",
-    "precio": ""
+    "idProducto": "producto 1"
   }, 
     {
-    "idProducto": "producto 2",
-    "precio": ""
+    "idProducto": "producto 2"
   }]
 }
 ```
 
-Response: //el error que tiene, esque la asignacion linea de venta y producto es uno a uno (no deberia ser asi, lo tengo que corregir)
-Si queres probar, agrega un producto nuevo, y metele el id nuevo.
+
+Response:
 ```json
 {
-    "status": 201, //Este status no va
+    "status": 201, //este no deberia estar, lo sacaremos
     "message": "Venta Generada exitosamente",
     "data": null
 }
