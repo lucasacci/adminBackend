@@ -23,8 +23,15 @@ Body:
 }
 ```
 
-Response:
-tiene un error cuando lo arregle lo cambio
+Response: //el error que tiene, esque la asignacion linea de venta y producto es uno a uno (no deberia ser asi, lo tengo que corregir)
+Si queres probar, agrega un producto nuevo, y metele el id nuevo.
+```json
+{
+    "status": 201, //Este status no va
+    "message": "Venta Generada exitosamente",
+    "data": null
+}
+```
 
 # Servicios
 ### Alta Servicios
