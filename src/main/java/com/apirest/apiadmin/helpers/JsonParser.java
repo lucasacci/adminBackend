@@ -126,4 +126,16 @@ public class JsonParser {
 
         return new VendedorModel(nombre, apellido, correo, dni, direccion, gerente);
     }
+
+    public static JsonNode productToJson(ProductoModel productoModel) {
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("id_producto", productoModel.getId_producto());
+        json.put("nombre", productoModel.getNombre());
+        json.put("precio", productoModel.getPrecio().toString());
+        json.put("categoria", productoModel.getCategoria());
+        json.put("id_gerente", productoModel.getGerente().getId_gerente());
+
+        return json;
+    }
 }
