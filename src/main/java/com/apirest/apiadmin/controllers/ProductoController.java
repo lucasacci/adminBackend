@@ -1,8 +1,12 @@
 package com.apirest.apiadmin.controllers;
 
+import com.apirest.apiadmin.DTO.ApiResponse;
+import com.apirest.apiadmin.helpers.JsonParser;
 import com.apirest.apiadmin.models.GerenteModel;
 import com.apirest.apiadmin.models.ProductoModel;
+import com.apirest.apiadmin.services.GerenteService;
 import com.apirest.apiadmin.services.ProductoService;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +22,9 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
+    @Autowired
+    private GerenteService gerenteService;
+
     @GetMapping
     public ResponseEntity<ArrayList<ProductoModel>> getProductos() {
         ArrayList<ProductoModel> productos = productoService.getProductos();
@@ -32,10 +39,32 @@ public class ProductoController {
     }
 
     @PostMapping("/crearproducto")
-    public ResponseEntity<String> crearProducto(@RequestBody ProductoModel producto) {
-        productoService.guardarProducto(producto);
+    public ResponseEntity<JsonNode> crearProducto(@RequestBody JsonNode json) {
+        try {
+            GerenteModel gerente = gerenteService.getGerente(json.get("id_gerente").asLong());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Producto creado con exito.");
+            ProductoModel producto = JsonParser.getProductFromJson(json, gerente);
+
+            productoService.guardarProducto(producto);
+
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Producto generado exitosmaente.",
+                    null
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
+        } catch (Exception e) {
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Error al cargar el producto" + e.getMessage(),
+                    null
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/{id}")

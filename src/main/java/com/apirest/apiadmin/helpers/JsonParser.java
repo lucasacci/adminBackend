@@ -1,8 +1,7 @@
 package com.apirest.apiadmin.helpers;
 
 import com.apirest.apiadmin.DTO.ApiResponse;
-import com.apirest.apiadmin.models.DescuentoModel;
-import com.apirest.apiadmin.models.GerenteModel;
+import com.apirest.apiadmin.models.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,9 +22,7 @@ public class JsonParser {
         String email     = json.get("email").asText();
         String direccion = json.get("direccion").asText();
 
-        GerenteModel gerente = new GerenteModel(dni, nombre, apellido, email, direccion);
-
-        return gerente;
+        return new GerenteModel(dni, nombre, apellido, email, direccion);
     }
 
     public static JsonNode responseToJson(ApiResponse<?> response) {
@@ -96,5 +93,37 @@ public class JsonParser {
 
     public static Integer getProductIDVentaFromJson(JsonNode json, Integer i) {
         return json.get("lineasDeVenta").get(i).get("idProducto").asInt();
+    }
+
+    public static ClientModel getClientFromJson(JsonNode json, VendedorModel vendedor) {
+        int dni          = json.get("dni").asInt();
+        String nombre    = json.get("nombre").asText();
+        String apellido  = json.get("apellido").asText();
+        String email     = json.get("email").asText();
+        String direccion = json.get("direccion").asText();
+
+        return new ClientModel(dni, nombre, apellido, email, direccion, vendedor);
+    }
+
+    public static ProductoModel getProductFromJson(JsonNode json, GerenteModel gerente) {
+        String categoria = json.get("categoria").asText();
+        String nombre    = json.get("nombre").asText();
+        Double precio    = json.get("precio").asDouble();
+        int stock = 0;
+        if (json.has("stock")){
+            stock = json.get("stock").asInt();
+        }
+
+        return new ProductoModel(nombre, precio, stock, categoria, gerente);
+    }
+
+    public static VendedorModel getVendedorFromJson(JsonNode json, GerenteModel gerente) {
+        int dni = json.get("dni").asInt();
+        String nombre = json.get("nombre").asText();
+        String apellido = json.get("apellido").asText();
+        String correo   = json.get("correo").asText();
+        String direccion = json.get("direccion").asText();
+
+        return new VendedorModel(nombre, apellido, correo, dni, direccion, gerente);
     }
 }

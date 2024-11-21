@@ -1,9 +1,13 @@
 package com.apirest.apiadmin.models;
 
+import com.apirest.apiadmin.listeners.AuditProductoListener;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "productos")
+@EntityListeners(AuditProductoListener.class)
 public class ProductoModel {
 
     @Id
@@ -22,13 +26,70 @@ public class ProductoModel {
     @Column
     private String imagen;
 
-//    public int getCantidad() {
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_gerente")
+    private GerenteModel gerente;
+
+    @Column
+    private LocalDateTime dateEvent;
+
+    @Column
+    private String Operation;
+
+    public ProductoModel(String nombre, Double precio, int stock, String categoria, GerenteModel gerente) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.categoria = categoria;
+        this.gerente = gerente;
+    }
+
+    //    public int getCantidad() {
 //        return cantidad;
 //    }
 //
 //    public void setCantidad(int cantidad) {
 //        this.cantidad = cantidad;
 //    }
+
+    @PrePersist
+    public void onPrePresist(){
+        audit("INSERT");
+    }
+
+    @PreUpdate
+    public void onPreUpdate(){
+        audit("UPDATE");
+    }
+
+    public void audit(String operation){
+        setOperation(operation);
+        setDateEvent(LocalDateTime.now());
+    }
+
+    public LocalDateTime getDateEvent() {
+        return dateEvent;
+    }
+
+    public void setDateEvent(LocalDateTime dateEvent) {
+        this.dateEvent = dateEvent;
+    }
+
+    public String getOperation() {
+        return Operation;
+    }
+
+    public void setOperation(String operation) {
+        Operation = operation;
+    }
+
+    public GerenteModel getGerente() {
+        return gerente;
+    }
+
+    public void setGerente(GerenteModel gerente) {
+        this.gerente = gerente;
+    }
 
     public Integer getId_producto() {
         return id_producto;
@@ -77,5 +138,6 @@ public class ProductoModel {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
+
 
 }

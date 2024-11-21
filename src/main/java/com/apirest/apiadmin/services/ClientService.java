@@ -1,12 +1,15 @@
 package com.apirest.apiadmin.services;
 
+import ch.qos.logback.core.net.server.Client;
 import com.apirest.apiadmin.models.ClientModel;
+import com.apirest.apiadmin.models.GerenteModel;
 import com.apirest.apiadmin.repositories.IClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -18,8 +21,20 @@ public class ClientService {
         return (ArrayList<ClientModel>) clientRepository.findAll();
     }
 
-    public ClientModel guardarCliente(ClientModel clientModel){
-        return clientRepository.save(clientModel);
+    public Optional<ClientModel> getClientByDNI(int dniclient){
+        return clientRepository.findByDni(dniclient);
+    }
+
+    public String guardarCliente(ClientModel client){
+        try {
+            if(getClientByDNI(client.getDni()).isPresent()) {
+                return "Cliente ya existente. DNI: " + client.getDni();
+            }
+            clientRepository.save(client);
+            return "Cliente Registrado Correctamente.";
+        } catch (Exception e) {
+            return "Error al registrar el Cliente. Ex: " + e.getMessage();
+        }
     }
 
     public ClientModel getCLiente(Long id){

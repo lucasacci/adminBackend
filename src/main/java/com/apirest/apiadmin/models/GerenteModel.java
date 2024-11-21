@@ -1,11 +1,13 @@
 package com.apirest.apiadmin.models;
 
+import com.apirest.apiadmin.listeners.AuditGerenteListener;
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "gerentes")
+@EntityListeners(AuditGerenteListener.class)
 public class GerenteModel {
 
     @Id
@@ -28,6 +30,12 @@ public class GerenteModel {
     @Column
     private String direccion;
 
+    @Column
+    private LocalDateTime dateEvent;
+
+    @Column
+    private String Operation;
+
     public GerenteModel(String dni, String nombre, String apellido, String email, String direccion) {
         this.dni = dni;
         this.nombre = nombre;
@@ -37,6 +45,37 @@ public class GerenteModel {
     }
 
     public GerenteModel(){}
+
+    @PrePersist
+    public void onPrePresist(){
+        audit("INSERT");
+    }
+
+    @PreUpdate
+    public void onPreUpdate(){
+        audit("UPDATE");
+    }
+
+    public void audit(String operation){
+        setOperation(operation);
+        setDateEvent(LocalDateTime.now());
+    }
+
+    public LocalDateTime getDateEvent() {
+        return dateEvent;
+    }
+
+    public void setDateEvent(LocalDateTime dateEvent) {
+        this.dateEvent = dateEvent;
+    }
+
+    public String getOperation() {
+        return Operation;
+    }
+
+    public void setOperation(String operation) {
+        Operation = operation;
+    }
 
     public long getId_gerente() {
         return id_gerente;
@@ -80,5 +119,9 @@ public class GerenteModel {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public void setId_gerente(long id_gerente) {
+        this.id_gerente = id_gerente;
     }
 }

@@ -1,22 +1,12 @@
 package com.apirest.apiadmin.DTO;
 
 public class ApiResponse<T> {
-    private int status;
     private String message;
     private T data;
 
-    public ApiResponse(int status, String message, T data) {
-        this.status = status;
+    public ApiResponse(String message, T data) {
         this.message = message;
         this.data = data;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public String getMessage() {

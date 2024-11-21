@@ -43,7 +43,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "2"
 								}
 							]
 						}
@@ -57,7 +57,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"dni\": \"42939904\",\r\n  \"nombre\": \"Jeremias\",\r\n  \"apellido\": \"Moreno Ivanoff\",\r\n  \"email\": \"jeremiasivanoff@hotmail.es\",\r\n  \"direccion\": \"avenida Belgrano 1779\"\r\n}",
+							"raw": "{\r\n  \"dni\": \"42949906\",\r\n  \"nombre\": \"Jeremias\",\r\n  \"apellido\": \"Moreno Ivanoff\",\r\n  \"email\": \"jeremiasivanoff@hotmail.es\",\r\n  \"direccion\": \"avenida Belgrano 1779\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -72,6 +72,39 @@
 							"path": [
 								"gerentes",
 								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Gerente by ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dni\": \"12345678\",\r\n    \"nombre\": \"Jeremias\",\r\n    \"apellido\": \"Moreno Ivanoff\",\r\n    \"email\": \"jeremiasivanoff@hotmail.es\",\r\n    \"direccion\": \"avenida Belgrano 1779\",\r\n    \"dateEvent\": null,\r\n    \"operation\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/gerentes/:id",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"gerentes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
 							]
 						}
 					},
@@ -130,7 +163,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"dni\": \"42939904\",\r\n  \"nombre\": \"Jeremias\",\r\n  \"apellido\": \"Moreno Ivanoff\",\r\n  \"correo\": \"jeremiasivanoff@hotmail.es\",\r\n  \"direccion\": \"avenida Belgrano 1779\"\r\n}",
+							"raw": "{\r\n  \"dni\": \"42939902\",\r\n  \"nombre\": \"Jeremias\",\r\n  \"apellido\": \"Moreno Ivanoff\",\r\n  \"correo\": \"jeremiasivanoff@hotmail.es\",\r\n  \"direccion\": \"avenida Belgrano 1779\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -203,7 +236,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"categoria\": \"hola\",\r\n  \"nombre\": \"Un programa 2\",\r\n  \"precio\": 40000\r\n}",
+							"raw": "{\r\n  \"categoria\": \"hola\",\r\n  \"nombre\": \"Un programa 2\",\r\n  \"precio\": 40000,\r\n  \"id_gerente\": \"1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -235,7 +268,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"fechaVenta\": \"2024-11-18 14:00:01\",\r\n  \"idVendedor\": \"1\",\r\n  \"idCliente\": \"1\",\r\n  \"montoTotal\": \"123123132\",\r\n  \"lineasDeVenta\": [\r\n    {\r\n    \"idProducto\": \"1\",\r\n    \"precio\": \"30000\"\r\n  }, \r\n    {\r\n    \"idProducto\": \"2\",\r\n    \"precio\": \"40000\"\r\n  }]\r\n}",
+							"raw": "{\r\n  \"fechaVenta\": \"2024-11-20 14:00:01\",\r\n  \"idVendedor\": \"1\",\r\n  \"idCliente\": \"1\",\r\n  \"montoTotal\": \"999999\",\r\n  \"lineasDeVenta\": [\r\n    {\r\n    \"idProducto\": \"4\"\r\n  }]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -308,7 +341,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"dni\": \"42939901\",\r\n  \"nombre\": \"Jeremias\",\r\n  \"apellido\": \"Moreno Ivanoff\",\r\n  \"email\": \"jeremiasivanoff@hotmail.es\",\r\n  \"direccion\": \"avenida Belgrano 1779\"\r\n}",
+							"raw": "{\r\n  \"dni\": \"42939902\",\r\n  \"nombre\": \"Jeremias\",\r\n  \"apellido\": \"Moreno Ivanoff\",\r\n  \"email\": \"jeremiasivanoff@hotmail.es\",\r\n  \"direccion\": \"avenida Belgrano 1779\",\r\n  \"idVendedor\": \"1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

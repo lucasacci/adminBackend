@@ -1,7 +1,13 @@
 package com.apirest.apiadmin.controllers;
 
+import com.apirest.apiadmin.DTO.ApiResponse;
+import com.apirest.apiadmin.helpers.JsonParser;
 import com.apirest.apiadmin.models.ClientModel;
+import com.apirest.apiadmin.models.VendedorModel;
 import com.apirest.apiadmin.services.ClientService;
+import com.apirest.apiadmin.services.VendedorService;
+import com.apirest.apiadmin.services.VentaService;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +22,9 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private VendedorService vendedorService;
+
     @GetMapping
     public ResponseEntity<ArrayList<ClientModel>> getClients() {
         ArrayList<ClientModel> clients = clientService.getClients();
@@ -23,9 +32,32 @@ public class ClientController {
     }
 
     @PostMapping("/crearcliente")
-    public ResponseEntity<String> guardarCliente(@RequestBody ClientModel client) {
-        clientService.guardarCliente(client);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado con éxito.");
+    public ResponseEntity<JsonNode> guardarCliente(@RequestBody JsonNode json) {
+        try {
+            VendedorModel vendedor = vendedorService.getVendedor(JsonParser.vendorIdHeaderVentaFromJson(json));
+
+            ClientModel client = JsonParser.getClientFromJson(json, vendedor);
+
+            String responseCliente = clientService.guardarCliente(client);
+
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    responseCliente,
+                    null
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
+        } catch (Exception e) {
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Error al crear el cliente" + e.getMessage(),
+                    null
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")
