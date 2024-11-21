@@ -455,6 +455,11 @@
 		{
 			"key": "BaseURL",
 			"value": "192.168.1.35:8080"
+		},
+		{
+			"key": "BaseURL2",
+			"value": "localhost:8080",
+			"type": "default"
 		}
 	]
 }
