@@ -1,14 +1,13 @@
 package com.apirest.apiadmin.models;
 
-import com.apirest.apiadmin.listeners.AuditGerenteModel;
+import com.apirest.apiadmin.listeners.AuditGerenteListener;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "gerentes")
-@EntityListeners(AuditGerenteModel.class)
+@EntityListeners(AuditGerenteListener.class)
 public class GerenteModel {
 
     @Id

@@ -1,8 +1,8 @@
 package com.apirest.apiadmin.listeners;
 
 import com.apirest.apiadmin.models.DescuentoModel;
-import com.apirest.apiadmin.models.GerenteModel;
 import com.apirest.apiadmin.models.HistoryModel;
+import com.apirest.apiadmin.models.VendedorModel;
 import com.apirest.apiadmin.repositories.IHistoryRepository;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreRemove;
@@ -13,47 +13,47 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class AuditGerenteModel {
+public class AuditVendedorListener {
     private final IHistoryRepository historyRepository;
 
     @Lazy
-    public AuditGerenteModel(IHistoryRepository historyRepository){
+    public AuditVendedorListener(IHistoryRepository historyRepository){
         this.historyRepository = historyRepository;
     }
 
     @PrePersist
-    private void prePersist(GerenteModel object){
+    private void prePersist(VendedorModel object){
         HistoryModel history = new HistoryModel();
-        history.setName("Gerente: Nombre: " + object.getNombre() +
+        history.setName("Vendedor: Nombre: " + object.getNombre() +
                 " Apellido: " + object.getApellido() +
                 " DNI: " + object.getDni());
         history.setDate(LocalDateTime.now());
         history.setOperation("INSERT");
-        history.setUser("ID Admin: " + "1");
+        history.setUser("ID Gerente: " + object.getId_gerente().getId_gerente());
         this.historyRepository.save(history);
     }
 
     @PreUpdate
-    private void preUpdate(GerenteModel object){
+    private void preUpdate(VendedorModel object){
         HistoryModel history = new HistoryModel();
-        history.setName("Gerente: Nombre: " + object.getNombre() +
+        history.setName("Vendedor: Nombre: " + object.getNombre() +
                 " Apellido: " + object.getApellido() +
                 " DNI: " + object.getDni());
         history.setDate(LocalDateTime.now());
         history.setOperation("UPDATE");
-        history.setUser("ID Admin: " + "1");
+        history.setUser("ID Gerente: " + object.getId_gerente().getId_gerente());
         this.historyRepository.save(history);
     }
 
     @PreRemove
-    private void preRemove(GerenteModel object){
+    private void preRemove(VendedorModel object){
         HistoryModel history = new HistoryModel();
-        history.setName("Gerente: Nombre: " + object.getNombre() +
+        history.setName("Vendedor: Nombre: " + object.getNombre() +
                 " Apellido: " + object.getApellido() +
                 " DNI: " + object.getDni());
         history.setDate(LocalDateTime.now());
         history.setOperation("DELETE");
-        history.setUser("ID Admin: " + "1");
+        history.setUser("ID Gerente: " + object.getId_gerente().getId_gerente());
         this.historyRepository.save(history);
     }
 }

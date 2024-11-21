@@ -116,4 +116,14 @@ public class JsonParser {
 
         return new ProductoModel(nombre, precio, stock, categoria, gerente);
     }
+
+    public static VendedorModel getVendedorFromJson(JsonNode json, GerenteModel gerente) {
+        int dni = json.get("dni").asInt();
+        String nombre = json.get("nombre").asText();
+        String apellido = json.get("apellido").asText();
+        String correo   = json.get("correo").asText();
+        String direccion = json.get("direccion").asText();
+
+        return new VendedorModel(nombre, apellido, correo, dni, direccion, gerente);
+    }
 }

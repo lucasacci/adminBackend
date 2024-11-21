@@ -1,5 +1,6 @@
 package com.apirest.apiadmin.models;
 
+import com.apirest.apiadmin.listeners.AuditVendedorListener;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -7,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "vendedores")
+@EntityListeners(AuditVendedorListener.class)
 public class VendedorModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +23,9 @@ public class VendedorModel {
     @Column
     private int dni;
 
+    @Column
+    private String direccion;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_gerente")
     private GerenteModel id_gerente;
@@ -33,6 +38,17 @@ public class VendedorModel {
 
     @Column
     private String Operation;
+
+    public VendedorModel(String nombre, String apellido, String correo, int dni, String direccion, GerenteModel id_gerente) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.dni = dni;
+        this.id_gerente = id_gerente;
+        this.direccion = direccion;
+    }
+
+    public VendedorModel(){};
 
     @PrePersist
     public void onPrePresist(){
@@ -121,5 +137,11 @@ public class VendedorModel {
         this.nombre = nombre;
     }
 
+    public String getDireccion() {
+        return direccion;
+    }
 
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
 }

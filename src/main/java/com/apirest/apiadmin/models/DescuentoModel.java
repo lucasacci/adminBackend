@@ -1,6 +1,6 @@
 package com.apirest.apiadmin.models;
 
-import com.apirest.apiadmin.listeners.AuditDescuentolistener;
+import com.apirest.apiadmin.listeners.AuditDescuentoListener;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "descuentos")
-@EntityListeners(AuditDescuentolistener.class)
+@EntityListeners(AuditDescuentoListener.class)
 public class DescuentoModel {
 
     @Id

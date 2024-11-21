@@ -1,10 +1,16 @@
 package com.apirest.apiadmin.controllers;
 
+import com.apirest.apiadmin.DTO.ApiResponse;
+import com.apirest.apiadmin.helpers.JsonParser;
+import com.apirest.apiadmin.models.GerenteModel;
 import com.apirest.apiadmin.models.ProductoModel;
 import com.apirest.apiadmin.models.VendedorModel;
+import com.apirest.apiadmin.services.GerenteService;
 import com.apirest.apiadmin.services.VendedorService;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
@@ -16,6 +22,9 @@ public class VendedorController {
 
     @Autowired
     private VendedorService vendedorService;
+
+    @Autowired
+    private GerenteService gerenteService;
 
     @GetMapping
     public ResponseEntity<ArrayList<VendedorModel>> getVendedores() {
@@ -32,10 +41,38 @@ public class VendedorController {
     }
 
     @PostMapping("/crearvendedor")
-    public ResponseEntity<String> crearVendedor(@RequestBody VendedorModel vendedor) {
-        vendedorService.guardarVendedor(vendedor);
+    public ResponseEntity<JsonNode> crearVendedor(@RequestBody JsonNode json) {
+        try {
+            GerenteModel gerente = gerenteService.getGerente(json.get("id_gerente").asLong());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Vendedor creado con exito.");
+            VendedorModel vendedor = JsonParser.getVendedorFromJson(json, gerente);
+
+            String responseVendedor = vendedorService.guardarVendedor(vendedor);
+
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    responseVendedor,
+                    null
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            if (responseVendedor.contains("Vendedor registrador exitosamente.")){
+                return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Error al crear el cliente" + e.getMessage(),
+                    null
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
     }
 
     @PutMapping("/{id}")

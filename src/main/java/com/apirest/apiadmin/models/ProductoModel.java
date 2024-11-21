@@ -1,13 +1,13 @@
 package com.apirest.apiadmin.models;
 
-import com.apirest.apiadmin.listeners.AuditProductoModel;
+import com.apirest.apiadmin.listeners.AuditProductoListener;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "productos")
-@EntityListeners(AuditProductoModel.class)
+@EntityListeners(AuditProductoListener.class)
 public class ProductoModel {
 
     @Id

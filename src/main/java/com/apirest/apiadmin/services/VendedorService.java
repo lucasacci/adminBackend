@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class VendedorService {
@@ -22,8 +23,20 @@ public class VendedorService {
         return vendedorRepository.findById(id).get();
     }
 
-    public VendedorModel guardarVendedor(VendedorModel vendedor) {
-        return vendedorRepository.save(vendedor);
+    public String guardarVendedor(VendedorModel vendedor) {
+        try {
+            if (getVendedorByDNI(vendedor.getDni()).isPresent()){
+                return "Vendedor ya registrado. DNI: " + vendedor.getDni();
+            }
+            vendedorRepository.save(vendedor);
+            return "Vendedor registrador exitosamente.";
+        } catch (Exception e) {
+            return "Error al rergistrar el cliente. Ex: " + e.getMessage();
+        }
+    }
+
+    private Optional<VendedorModel> getVendedorByDNI(int dni) {
+        return vendedorRepository.findByDni(dni);
     }
 
     public VendedorModel editVendedor(VendedorModel vendedor, Long id) {

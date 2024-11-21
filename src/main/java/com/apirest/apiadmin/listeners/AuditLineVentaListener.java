@@ -1,6 +1,5 @@
 package com.apirest.apiadmin.listeners;
 
-import com.apirest.apiadmin.models.DescuentoModel;
 import com.apirest.apiadmin.models.HistoryModel;
 import com.apirest.apiadmin.models.LineVentaModel;
 import com.apirest.apiadmin.repositories.IHistoryRepository;
@@ -13,11 +12,11 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class AuditLineVentaModel {
+public class AuditLineVentaListener {
     private final IHistoryRepository historyRepository;
 
     @Lazy
-    public AuditLineVentaModel(IHistoryRepository historyRepository){
+    public AuditLineVentaListener(IHistoryRepository historyRepository){
         this.historyRepository = historyRepository;
     }
 

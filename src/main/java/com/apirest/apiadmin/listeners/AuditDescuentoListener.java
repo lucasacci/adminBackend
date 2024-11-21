@@ -12,12 +12,11 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class AuditDescuentolistener {
-
+public class AuditDescuentoListener {
     private final IHistoryRepository historyRepository;
 
     @Lazy
-    public AuditDescuentolistener(IHistoryRepository historyRepository) {
+    public AuditDescuentoListener(IHistoryRepository historyRepository) {
         this.historyRepository = historyRepository;
     }
 
