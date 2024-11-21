@@ -23,6 +23,10 @@ public class ProductoModel {
     private int stock;
     @Column
     private String categoria;
+
+    @Column
+    private String comentarios;
+
     @Column
     private String imagen;
 
@@ -36,12 +40,13 @@ public class ProductoModel {
     @Column
     private String Operation;
 
-    public ProductoModel(String nombre, Double precio, int stock, String categoria, GerenteModel gerente) {
+    public ProductoModel(String nombre, Double precio, int stock, String categoria, String comentarios, GerenteModel gerente) {
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
         this.categoria = categoria;
         this.gerente = gerente;
+        this.comentarios = comentarios;
     }
 
     public ProductoModel(){}
@@ -140,5 +145,11 @@ public class ProductoModel {
         this.imagen = imagen;
     }
 
+    public String getComentarios() {
+        return comentarios;
+    }
 
+    public void setComentarios(String comentarios) {
+        this.comentarios = comentarios;
+    }
 }
