@@ -3,6 +3,9 @@ package com.apirest.apiadmin.services;
 
 import com.apirest.apiadmin.models.EmailModel;
 import com.apirest.apiadmin.repositories.IEmailService;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.thymeleaf.TemplateEngine;
 
 public class EmailServiceImpl implements IEmailService {
     private final JavaMailSender mailSender;
