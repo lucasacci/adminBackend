@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,9 +27,30 @@ public class ProductoController {
     private GerenteService gerenteService;
 
     @GetMapping
-    public ResponseEntity<ArrayList<ProductoModel>> getProductos() {
-        ArrayList<ProductoModel> productos = productoService.getProductos();
-        return ResponseEntity.ok().body(productos);
+    public ResponseEntity<JsonNode> getProductos() {
+        List<ProductoModel> productos = productoService.getProductos();
+        List<JsonNode> productosJson = new ArrayList<>();
+        try {
+            productos.forEach( productoModel -> {
+                productosJson.add(JsonParser.productToJson(productoModel));
+            });
+
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
+                    "Listado Productos.",
+                    productosJson
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<Void> response = new ApiResponse<>(
+                    "Error al obtener pacientes: " + e.getMessage(),
+                    null
+            );
+            JsonNode errorResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")

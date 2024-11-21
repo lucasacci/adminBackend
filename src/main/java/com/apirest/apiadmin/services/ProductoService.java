@@ -8,6 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ProductoService {
@@ -19,8 +20,8 @@ public class ProductoService {
         return productoRepository.save(producto);
     }
 
-    public ArrayList<ProductoModel> getProductos(){
-        return (ArrayList<ProductoModel>) productoRepository.findAll();
+    public List<ProductoModel> getProductos(){
+        return new ArrayList<>(productoRepository.findAll());
     }
 
     public ProductoModel getProducto(Integer id){

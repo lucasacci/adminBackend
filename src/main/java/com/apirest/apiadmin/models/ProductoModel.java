@@ -44,6 +44,7 @@ public class ProductoModel {
         this.gerente = gerente;
     }
 
+    public ProductoModel(){}
     //    public int getCantidad() {
 //        return cantidad;
 //    }
