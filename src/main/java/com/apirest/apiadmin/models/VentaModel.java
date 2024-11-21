@@ -26,7 +26,7 @@ public class VentaModel {
     @JoinColumn(name = "id_cliente")
     private ClientModel cliente;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "idLineVenta")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "venta")
     private List<LineVentaModel> lineasDeVenta = new ArrayList<LineVentaModel>();
 
 
@@ -40,7 +40,7 @@ public class VentaModel {
     public VentaModel(){}
 
     public void agregarProducto(ProductoModel producto) {
-        LineVentaModel linea = new LineVentaModel(producto.getPrecio(),producto);
+        LineVentaModel linea = new LineVentaModel(producto.getPrecio(),this,producto);
         this.lineasDeVenta.add(linea);
     }
 

@@ -16,7 +16,7 @@ public class LineVentaModel {
     @JoinColumn(name = "idVenta")
     private VentaModel venta;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_producto")
     private ProductoModel producto;
 
