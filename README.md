@@ -12,13 +12,20 @@ Body:
   "montoTotal": "",
   "lineasDeVenta": [
     {
-    "idProducto": "producto 1",
-    "precio": ""
+    "idProducto": "producto 1"
   }, 
     {
-    "idProducto": "producto 2",
-    "precio": ""
+    "idProducto": "producto 2"
   }]
+}
+```
+
+Response:
+```json
+{
+    "status": 201, //este no deberia estar, lo sacaremos
+    "message": "Venta Generada exitosamente",
+    "data": null
 }
 ```
 
