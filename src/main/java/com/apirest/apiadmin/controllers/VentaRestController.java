@@ -72,7 +72,7 @@ public class VentaRestController {
 
             JsonNode jsonResponse = JsonParser.responseToJson(response);
 
-            return new ResponseEntity<>(jsonResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

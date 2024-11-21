@@ -1,10 +1,7 @@
 package com.apirest.apiadmin.helpers;
 
 import com.apirest.apiadmin.DTO.ApiResponse;
-import com.apirest.apiadmin.models.ClientModel;
-import com.apirest.apiadmin.models.DescuentoModel;
-import com.apirest.apiadmin.models.GerenteModel;
-import com.apirest.apiadmin.models.VendedorModel;
+import com.apirest.apiadmin.models.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -106,5 +103,17 @@ public class JsonParser {
         String direccion = json.get("direccion").asText();
 
         return new ClientModel(dni, nombre, apellido, email, direccion, vendedor);
+    }
+
+    public static ProductoModel getProductFromJson(JsonNode json, GerenteModel gerente) {
+        String categoria = json.get("categoria").asText();
+        String nombre    = json.get("nombre").asText();
+        Double precio    = json.get("precio").asDouble();
+        int stock = 0;
+        if (json.has("stock")){
+            stock = json.get("stock").asInt();
+        }
+
+        return new ProductoModel(nombre, precio, stock, categoria, gerente);
     }
 }

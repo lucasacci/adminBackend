@@ -1,11 +1,13 @@
 package com.apirest.apiadmin.models;
 
+import com.apirest.apiadmin.listeners.AuditProductoModel;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "productos")
+@EntityListeners(AuditProductoModel.class)
 public class ProductoModel {
 
     @Id
@@ -24,13 +26,25 @@ public class ProductoModel {
     @Column
     private String imagen;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_gerente")
+    private GerenteModel gerente;
+
     @Column
     private LocalDateTime dateEvent;
 
     @Column
     private String Operation;
 
-//    public int getCantidad() {
+    public ProductoModel(String nombre, Double precio, int stock, String categoria, GerenteModel gerente) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.categoria = categoria;
+        this.gerente = gerente;
+    }
+
+    //    public int getCantidad() {
 //        return cantidad;
 //    }
 //
@@ -67,6 +81,14 @@ public class ProductoModel {
 
     public void setOperation(String operation) {
         Operation = operation;
+    }
+
+    public GerenteModel getGerente() {
+        return gerente;
+    }
+
+    public void setGerente(GerenteModel gerente) {
+        this.gerente = gerente;
     }
 
     public Integer getId_producto() {
