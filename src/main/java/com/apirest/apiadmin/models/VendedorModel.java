@@ -2,6 +2,7 @@ package com.apirest.apiadmin.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -26,6 +27,43 @@ public class VendedorModel {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "vendedor")
     private List<VentaModel> ventas;
+
+    @Column
+    private LocalDateTime dateEvent;
+
+    @Column
+    private String Operation;
+
+    @PrePersist
+    public void onPrePresist(){
+        audit("INSERT");
+    }
+
+    @PreUpdate
+    public void onPreUpdate(){
+        audit("UPDATE");
+    }
+
+    public void audit(String operation){
+        setOperation(operation);
+        setDateEvent(LocalDateTime.now());
+    }
+
+    public LocalDateTime getDateEvent() {
+        return dateEvent;
+    }
+
+    public void setDateEvent(LocalDateTime dateEvent) {
+        this.dateEvent = dateEvent;
+    }
+
+    public String getOperation() {
+        return Operation;
+    }
+
+    public void setOperation(String operation) {
+        Operation = operation;
+    }
 
     public long getId_vendedor() {
         return id_vendedor;
@@ -82,4 +120,6 @@ public class VendedorModel {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+
 }

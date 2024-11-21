@@ -56,7 +56,7 @@ public class VentaRestController {
 
             ventaService.guardarVenta(venta);
 
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.CREATED.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Venta Generada exitosamente",
                     null
             );
@@ -65,7 +65,7 @@ public class VentaRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception e) {
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error al Crear la venta" + e.getMessage(),
                     null
             );

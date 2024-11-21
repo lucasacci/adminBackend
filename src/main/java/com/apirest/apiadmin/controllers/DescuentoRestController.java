@@ -31,7 +31,6 @@ public class DescuentoRestController {
             String responseDescuento = descuentosService.saveDescuento(descuento);
 
             ApiResponse<JsonNode> response = new ApiResponse<>(
-                    HttpStatus.OK.value(),
                     responseDescuento,
                     new ObjectMapper().createObjectNode()
             );
@@ -40,7 +39,7 @@ public class DescuentoRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error al Crear Descuento: " + ex.getMessage(),
                     null);
 
@@ -67,7 +66,6 @@ public class DescuentoRestController {
             });
 
             ApiResponse<List<JsonNode>> response = new ApiResponse<>(
-                    HttpStatus.OK.value(),
                     "Obtener Descuentos.",
                     descuentosJson
             );
@@ -76,7 +74,7 @@ public class DescuentoRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<Void> response = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+            ApiResponse<Void> response = new ApiResponse<>(
                     "Error al obtener descuentos: " + e.getMessage(),
                     null);
 

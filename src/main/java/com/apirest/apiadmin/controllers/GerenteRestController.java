@@ -46,7 +46,6 @@ public class GerenteRestController {
 
 
             ApiResponse<JsonNode> response = new ApiResponse<>(
-                    HttpStatus.OK.value(),
                     responseGerente,
                     new ObjectMapper().createObjectNode()
             );
@@ -55,7 +54,7 @@ public class GerenteRestController {
 
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception ex) {
-            ApiResponse<JsonNode> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error al Crear Gerente: " + ex.getMessage(),
                     null);
 

@@ -1,8 +1,10 @@
 package com.apirest.apiadmin.helpers;
 
 import com.apirest.apiadmin.DTO.ApiResponse;
+import com.apirest.apiadmin.models.ClientModel;
 import com.apirest.apiadmin.models.DescuentoModel;
 import com.apirest.apiadmin.models.GerenteModel;
+import com.apirest.apiadmin.models.VendedorModel;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,9 +25,7 @@ public class JsonParser {
         String email     = json.get("email").asText();
         String direccion = json.get("direccion").asText();
 
-        GerenteModel gerente = new GerenteModel(dni, nombre, apellido, email, direccion);
-
-        return gerente;
+        return new GerenteModel(dni, nombre, apellido, email, direccion);
     }
 
     public static JsonNode responseToJson(ApiResponse<?> response) {
@@ -96,5 +96,15 @@ public class JsonParser {
 
     public static Integer getProductIDVentaFromJson(JsonNode json, Integer i) {
         return json.get("lineasDeVenta").get(i).get("idProducto").asInt();
+    }
+
+    public static ClientModel getClientFromJson(JsonNode json, VendedorModel vendedor) {
+        int dni          = json.get("dni").asInt();
+        String nombre    = json.get("nombre").asText();
+        String apellido  = json.get("apellido").asText();
+        String email     = json.get("email").asText();
+        String direccion = json.get("direccion").asText();
+
+        return new ClientModel(dni, nombre, apellido, email, direccion, vendedor);
     }
 }

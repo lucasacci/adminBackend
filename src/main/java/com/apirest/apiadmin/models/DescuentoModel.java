@@ -3,6 +3,7 @@ package com.apirest.apiadmin.models;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -28,6 +29,12 @@ public class DescuentoModel {
     @JoinColumn(name = "id_gerente")
     private GerenteModel gerente;
 
+    @Column
+    private LocalDateTime dateEvent;
+
+    @Column
+    private String Operation;
+
     public DescuentoModel(){}
 
     public DescuentoModel(String descripcion, String porcentajeDescuento, Date fechaCaducidad, GerenteModel gerente){
@@ -49,6 +56,37 @@ public class DescuentoModel {
         return true;
     }
 
+    @PrePersist
+    public void onPrePresist(){
+        audit("INSERT");
+    }
+
+    @PreUpdate
+    public void onPreUpdate(){
+        audit("UPDATE");
+    }
+
+    public void audit(String operation){
+        setOperation(operation);
+        setDateEvent(LocalDateTime.now());
+    }
+
+    public LocalDateTime getDateEvent() {
+        return dateEvent;
+    }
+
+    public void setDateEvent(LocalDateTime dateEvent) {
+        this.dateEvent = dateEvent;
+    }
+
+    public String getOperation() {
+        return Operation;
+    }
+
+    public void setOperation(String operation) {
+        Operation = operation;
+    }
+
     public Integer getIdDescuento() {
         return idDescuento;
     }
@@ -67,5 +105,25 @@ public class DescuentoModel {
 
     public GerenteModel getGerente() {
         return gerente;
+    }
+
+    public void setIdDescuento(Integer idDescuento) {
+        this.idDescuento = idDescuento;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setPorcentajeDescuento(String porcentajeDescuento) {
+        this.porcentajeDescuento = porcentajeDescuento;
+    }
+
+    public void setFechaCaducidad(Date fechaCaducidad) {
+        this.fechaCaducidad = fechaCaducidad;
+    }
+
+    public void setGerente(GerenteModel gerente) {
+        this.gerente = gerente;
     }
 }

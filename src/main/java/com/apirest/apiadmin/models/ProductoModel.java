@@ -2,6 +2,8 @@ package com.apirest.apiadmin.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "productos")
 public class ProductoModel {
@@ -22,6 +24,12 @@ public class ProductoModel {
     @Column
     private String imagen;
 
+    @Column
+    private LocalDateTime dateEvent;
+
+    @Column
+    private String Operation;
+
 //    public int getCantidad() {
 //        return cantidad;
 //    }
@@ -29,6 +37,37 @@ public class ProductoModel {
 //    public void setCantidad(int cantidad) {
 //        this.cantidad = cantidad;
 //    }
+
+    @PrePersist
+    public void onPrePresist(){
+        audit("INSERT");
+    }
+
+    @PreUpdate
+    public void onPreUpdate(){
+        audit("UPDATE");
+    }
+
+    public void audit(String operation){
+        setOperation(operation);
+        setDateEvent(LocalDateTime.now());
+    }
+
+    public LocalDateTime getDateEvent() {
+        return dateEvent;
+    }
+
+    public void setDateEvent(LocalDateTime dateEvent) {
+        this.dateEvent = dateEvent;
+    }
+
+    public String getOperation() {
+        return Operation;
+    }
+
+    public void setOperation(String operation) {
+        Operation = operation;
+    }
 
     public Integer getId_producto() {
         return id_producto;
@@ -77,5 +116,6 @@ public class ProductoModel {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
+
 
 }
