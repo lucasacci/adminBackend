@@ -109,12 +109,13 @@ public class JsonParser {
         String categoria = json.get("categoria").asText();
         String nombre    = json.get("nombre").asText();
         Double precio    = json.get("precio").asDouble();
+        String comentarios = json.get("comentarios").asText();
         int stock = 0;
         if (json.has("stock")){
             stock = json.get("stock").asInt();
         }
 
-        return new ProductoModel(nombre, precio, stock, categoria, gerente);
+        return new ProductoModel(nombre, precio, stock, categoria, comentarios, gerente);
     }
 
     public static VendedorModel getVendedorFromJson(JsonNode json, GerenteModel gerente) {
@@ -134,6 +135,7 @@ public class JsonParser {
         json.put("nombre", productoModel.getNombre());
         json.put("precio", productoModel.getPrecio().toString());
         json.put("categoria", productoModel.getCategoria());
+        json.put("comentarios", productoModel.getComentarios());
         json.put("id_gerente", productoModel.getGerente().getId_gerente());
 
         return json;
