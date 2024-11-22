@@ -4,6 +4,7 @@ package com.apirest.apiadmin.services;
 import com.apirest.apiadmin.models.EmailModel;
 import com.apirest.apiadmin.repositories.IEmailService;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,6 +12,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.TemplateEngine;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
+
+import java.util.Map;
 
 @Service
 public class EmailServiceImpl implements IEmailService {
@@ -23,7 +26,7 @@ public class EmailServiceImpl implements IEmailService {
     }
 
     @Override
-    public void sendEmail(EmailModel email, JsonNode json) throws MessagingException {
+    public void sendEmail(EmailModel email, JsonNode venta) throws MessagingException {
         try {
             MimeMessage mimeMailMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMailMessage,
@@ -37,7 +40,10 @@ public class EmailServiceImpl implements IEmailService {
         /*
         body es la variable definida en nuestro Template HTML dentro de la etiqueta
         */
-            context.setVariable("venta", json);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> ventaMap = objectMapper.convertValue(venta, Map.class);
+            context.setVariable("venta", ventaMap);
 
 
             String contenidoHtml = templateEngine.process("email_template", context);

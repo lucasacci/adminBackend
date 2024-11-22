@@ -4,6 +4,7 @@ import com.apirest.apiadmin.DTO.ApiResponse;
 import com.apirest.apiadmin.models.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.text.ParseException;
@@ -120,9 +121,9 @@ public class JsonParser {
     }
 
     public static ProductoModel getProductFromJson(JsonNode json, GerenteModel gerente) {
-        String categoria = json.get("categoria").asText();
-        String nombre    = json.get("nombre").asText();
-        Double precio    = json.get("precio").asDouble();
+        String categoria   = json.get("categoria").asText();
+        String nombre      = json.get("nombre").asText();
+        Double precio      = json.get("precio").asDouble();
         String comentarios = json.get("comentarios").asText();
         int stock = 0;
         if (json.has("stock")){
@@ -133,10 +134,10 @@ public class JsonParser {
     }
 
     public static VendedorModel getVendedorFromJson(JsonNode json, GerenteModel gerente) {
-        int dni = json.get("dni").asInt();
-        String nombre = json.get("nombre").asText();
-        String apellido = json.get("apellido").asText();
-        String correo   = json.get("correo").asText();
+        int dni          = json.get("dni").asInt();
+        String nombre    = json.get("nombre").asText();
+        String apellido  = json.get("apellido").asText();
+        String correo    = json.get("correo").asText();
         String direccion = json.get("direccion").asText();
 
         return new VendedorModel(nombre, apellido, correo, dni, direccion, gerente);
@@ -174,18 +175,7 @@ public class JsonParser {
 
         String paymentMethod = paymentJson.get("paymentMethod").asText();
 
-        if(!paymentJson.get("cashPaymentDetails").isNull()){
-            Double amount = paymentJson.get("cashPaymentDetails").get("amount").asDouble();
-            Double returned = paymentJson.get("cashPaymentDetails").get("returned").asDouble();
-
-            return new PaymentModel(
-                    paymentMethod,
-                    amount, returned,
-                    null, null, null, null
-            );
-        }
-
-        if(!paymentJson.get("cardDetails").isNull()){
+        if(paymentMethod.equals("Tarjeta")) {
             String number = paymentJson.get("cardDetails").get("number").asText();
             String name = paymentJson.get("cardDetails").get("name").asText();
             String securityCode = paymentJson.get("cardDetails").get("securityCode").asText();
@@ -197,6 +187,84 @@ public class JsonParser {
                     number, name, securityCode, expirationDate
             );
         }
+
+        if(paymentMethod.equals("Efectivo")) {
+            Double amount = paymentJson.get("cashPaymentDetails").get("amount").asDouble();
+            Double returned = paymentJson.get("cashPaymentDetails").get("returned").asDouble();
+
+            return new PaymentModel(
+                    paymentMethod,
+                    amount, returned,
+                    null, null, null, null
+            );
+        }
+
         return new PaymentModel();
+    }
+
+    public static JsonNode ventaToEmailJson(VentaModel venta) {
+        //Lines
+        ArrayNode jsonArray  = mapper.createArrayNode();
+        venta.getLineasDeVenta().forEach(lineVentaModel -> {
+            jsonArray.add(lineVentaToJson(lineVentaModel));
+        });
+
+        //Card Details
+        ObjectNode cardDetails = mapper.createObjectNode();
+        if(venta.getPayment().getPaymentMethod().equals("Tarjeta")) {
+            cardDetails.put("number", venta.getPayment().getCardDetailsModel().getNumber());
+            cardDetails.put("name", venta.getPayment().getCardDetailsModel().getName());
+            cardDetails.put("expirationDate", venta.getPayment().getCardDetailsModel().getExpirationDate());
+        } else {
+            cardDetails.nullNode();
+        }
+
+        //Cash Details
+        ObjectNode cashDetails = mapper.createObjectNode();
+        if (venta.getPayment().getPaymentMethod().equals("Efectivo")) {
+            cashDetails.put("amount", venta.getPayment().getCashPaymentDetailsModel().getAmount().toString());
+            cashDetails.put("returned", venta.getPayment().getCashPaymentDetailsModel().getReturned().toString());
+        } else {
+            cashDetails.nullNode();
+        }
+
+        //Payment
+        ObjectNode payment = mapper.createObjectNode();
+        payment.put("paymentMethod", venta.getPayment().getPaymentMethod());
+        payment.set("cardDetails", cardDetails);
+        payment.set("cashPaymentDetails", cashDetails);
+
+        //Header
+        ObjectNode json = mapper.createObjectNode();
+        json.put("id", venta.getIdVenta());
+        json.put("date", venta.getFechaVenta().toString());
+        json.put("sellerName", venta.getVendedor().getApellido() + ", " +
+                venta.getVendedor().getNombre());
+        json.put("clientName", venta.getCliente().getApellido() + ", " +
+                venta.getCliente().getNombre());
+        json.put("total", venta.getMontoTotal().toString());
+        json.set("sellLines", jsonArray);
+        json.set("paymentDetails", payment);
+
+        return json;
+    }
+
+    public static JsonNode addVentaNodeOnTop(JsonNode json) {
+        //VentaCompleta
+        ObjectNode jsonVenta = mapper.createObjectNode();
+        jsonVenta.set("venta", json);
+
+        return jsonVenta;
+    }
+
+    private static JsonNode lineVentaToJson(LineVentaModel lineVentaModel) {
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("productName", lineVentaModel.getProducto().getNombre());
+        json.put("count", lineVentaModel.getCount().toString());
+        json.put("productPrecio", lineVentaModel.getProducto().getPrecio().toString());
+        json.put("subtotal", lineVentaModel.getSubTotal().toString());
+
+        return json;
     }
 }

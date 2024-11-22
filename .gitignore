@@ -1,5 +1,5 @@
 HELP.md
-src/main/resources/email.properties
+#src/main/resources/email.properties
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

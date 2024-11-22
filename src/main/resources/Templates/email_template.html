@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -25,9 +24,9 @@ HTML
     </thead>
     <tbody>
     <tr th:each="linea : ${venta.sellLines}">
-        <td th:text="${linea.product.name}"></td>
+        <td th:text="${linea.productName}"></td>
         <td th:text="${linea.count}"></td>
-        <td th:text="${linea.product.precio}"></td>
+        <td th:text="${linea.productPrecio}"></td>
         <td th:text="${linea.subtotal}"></td>
     </tr>
     </tbody>

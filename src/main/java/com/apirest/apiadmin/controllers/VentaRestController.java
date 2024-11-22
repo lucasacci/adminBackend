@@ -7,6 +7,7 @@ import com.apirest.apiadmin.models.*;
 import com.apirest.apiadmin.repositories.IEmailService;
 import com.apirest.apiadmin.services.*;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,13 +67,18 @@ public class VentaRestController {
             String responsePay = exPay.pay();
 
 
+            //JsonNode jsonToEmail = JsonParser.addVentaNodeOnTop(JsonParser.ventaToEmailJson(venta)); //este tiene un: { venta: {informacion} }
+            JsonNode jsonToEmail = JsonParser.ventaToEmailJson(venta);
+
+            System.out.println(jsonToEmail.toPrettyString());
+
             //Envio de mail a Cliente
-//            EmailModel email = new EmailModel(
-//                    cliente.getEmail(),
-//                    "Notificacion de Pago - Sitema venta Admin",
-//                    ""
-//            );
-//            emailService.sendEmail(email,json);
+            EmailModel email = new EmailModel(
+                    cliente.getEmail(),
+                    "Notificacion de Pago - Sitema venta Admin",
+                    jsonToEmail.toPrettyString()
+            );
+            emailService.sendEmail(email,jsonToEmail);
 
             ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Venta Generada exitosamente",
@@ -84,7 +90,7 @@ public class VentaRestController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception e) {
             ApiResponse<JsonNode> response = new ApiResponse<>(
-                    "Error al Crear la venta" + e.getMessage(),
+                    "Error al Crear la venta. Ex:" + e.getMessage(),
                     null
             );
 

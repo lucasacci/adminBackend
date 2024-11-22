@@ -137,4 +137,11 @@ public class VentaModel {
         this.lineasDeVenta = lineasDeVenta;
     }
 
+    public PaymentModel getPayment() {
+        return payment;
+    }
+
+    public void setPayment(PaymentModel payment) {
+        this.payment = payment;
+    }
 }
