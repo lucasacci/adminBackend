@@ -1,5 +1,6 @@
 package com.apirest.apiadmin.controllers;
 
+import ch.qos.logback.core.net.server.Client;
 import com.apirest.apiadmin.DTO.ApiResponse;
 import com.apirest.apiadmin.helpers.JsonParser;
 import com.apirest.apiadmin.models.ClientModel;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,9 +28,30 @@ public class ClientController {
     private VendedorService vendedorService;
 
     @GetMapping
-    public ResponseEntity<ArrayList<ClientModel>> getClients() {
-        ArrayList<ClientModel> clients = clientService.getClients();
-        return ResponseEntity.ok(clients);
+    public ResponseEntity<JsonNode> getClients() {
+        List<ClientModel> clients = clientService.getClients();
+        List<JsonNode> clientsJson = new ArrayList<>();
+        try {
+            clients.forEach( clientModel -> {
+                clientsJson.add(JsonParser.clientToJson(clientModel));
+            });
+
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
+                    "Listado Clientes.",
+                    clientsJson
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<Void> response = new ApiResponse<>(
+                    "Error al obtener Clientes: Ex: " + e.getMessage(),
+                    null
+            );
+            JsonNode errorResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/crearcliente")
@@ -61,11 +84,24 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientModel> getCliente(@PathVariable Long id) {
-        Optional<ClientModel> cliente = Optional.ofNullable(clientService.getCLiente(id));
+    public ResponseEntity<JsonNode> getCliente(@PathVariable Long id) {
+        try{
+            ClientModel client = clientService.getCLiente(id);
 
-        return cliente.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Vendedor encontrado",
+                    JsonParser.clientToJson(client)
+            );
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.FOUND);
+        } catch (Exception e) {
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Error al buscar el Vendedor: " + e.getMessage(),
+                    null
+            );
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
+        }
     }
 
 

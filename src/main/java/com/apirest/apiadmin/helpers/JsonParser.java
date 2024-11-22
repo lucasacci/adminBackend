@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class JsonParser {
 
@@ -266,5 +267,48 @@ public class JsonParser {
         json.put("subtotal", lineVentaModel.getSubTotal().toString());
 
         return json;
+    }
+
+    public static JsonNode clientToJson(ClientModel clientModel) {
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("id_cliente", clientModel.getId_cliente());
+        json.put("nombre", clientModel.getNombre());
+        json.put("apellido", clientModel.getApellido());
+        json.put("email", clientModel.getEmail());
+        json.put("dni", clientModel.getDni());
+        json.put("id_vendedor", clientModel.getVendedor().getId_vendedor());
+
+        return json;
+    }
+
+    private static JsonNode ventasToJson(List<VentaModel> ventas) {
+        ArrayNode ventasArray  = mapper.createArrayNode();
+        ObjectNode ventasJson = mapper.createObjectNode();
+
+        ArrayNode linesArray  = mapper.createArrayNode();
+        ObjectNode linesJson = mapper.createObjectNode();
+
+        ventas.forEach(ventaModel -> {
+            ventasJson.put("idVenta", ventaModel.getIdVenta());
+            ventasJson.put("fechaVenta", ventaModel.getFechaVenta().toString());
+            ventasJson.put("montoTotal", ventaModel.getMontoTotal());
+            ventasJson.put("idVendedor", ventaModel.getVendedor().getId_vendedor());
+            ventasJson.put("paymentType", ventaModel.getPayment().getPaymentMethod());
+
+            ventaModel.getLineasDeVenta().forEach(lineVentaModel -> {
+                linesJson.put("productName", lineVentaModel.getProducto().getNombre());
+                linesJson.put("productPrice", lineVentaModel.getPrecioVenta());
+                linesJson.put("count", lineVentaModel.getCount());
+                linesJson.put("subtotal", lineVentaModel.getSubTotal());
+
+                linesArray.add(linesJson);
+            });
+            ventasJson.set("sellLines", linesArray);
+
+            ventasArray.add(ventasJson);
+        });
+
+        return ventasArray;
     }
 }
