@@ -45,7 +45,7 @@ public class ProductoController {
             return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (Exception e) {
             ApiResponse<Void> response = new ApiResponse<>(
-                    "Error al obtener pacientes: " + e.getMessage(),
+                    "Error al obtener Productos: " + e.getMessage(),
                     null
             );
             JsonNode errorResponse = JsonParser.responseToJson(response);

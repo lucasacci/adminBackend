@@ -3,7 +3,7 @@ package com.apirest.apiadmin.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table("cardDetails")
+@Table(name = "cardDetails")
 public class CardDetailsModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

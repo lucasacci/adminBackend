@@ -140,4 +140,18 @@ public class JsonParser {
 
         return json;
     }
+
+    public static JsonNode vendedorToJson(VendedorModel vendedorModel) {
+        ObjectNode json = mapper.createObjectNode();
+
+        json.put("id_vendedor", vendedorModel.getId_vendedor());
+        json.put("nombre", vendedorModel.getNombre());
+        json.put("apellido", vendedorModel.getApellido());
+        json.put("correo", vendedorModel.getCorreo());
+        json.put("dni", vendedorModel.getDni()).asInt();
+        json.put("direccion", vendedorModel.getDireccion());
+        json.put("id_gerente", vendedorModel.getId_gerente().getId_gerente());
+
+        return json;
+    }
 }
