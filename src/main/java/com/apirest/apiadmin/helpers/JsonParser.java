@@ -65,10 +65,15 @@ public class JsonParser {
     }
 
     public static Date DateHeaderVentaFromJson(JsonNode json) {
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss ");
         Date fechaVenta = null;
         try {
-            fechaVenta = formatoFecha.parse(json.get("fechaVenta").asText());
+            fechaVenta = formatoFecha.parse(
+                    json.get("date")
+                            .asText()
+                            .replace("Z"," ")
+                            .replace("T"," ")
+            );
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -76,7 +81,7 @@ public class JsonParser {
     }
 
     public static Double montoTotalHeaderVentaFromJson(JsonNode json) {
-        return json.get("montoTotal").asDouble();
+        return json.get("total").asDouble();
     }
 
     public static Long vendorIdHeaderVentaFromJson(JsonNode json) {
@@ -88,11 +93,20 @@ public class JsonParser {
     }
 
     public static int getLineasDeVentaFromJson(JsonNode json) {
-       return json.get("lineasDeVenta").size();
+       return json.get("sellLines").size();
+    }
+
+    public static Integer getCountFromLineFromJson(JsonNode json, Integer i) {
+        return json.get("sellLines").get(i).get("count").asInt();
     }
 
     public static Integer getProductIDVentaFromJson(JsonNode json, Integer i) {
-        return json.get("lineasDeVenta").get(i).get("idProducto").asInt();
+        String idString = json.get("sellLines").get(i).get("product").get("id").asText();
+        return Integer.parseInt(idString);
+    }
+
+    public static Double getSubTotalFromJson(JsonNode json, Integer i) {
+        return json.get("sellLines").get(i).get("subtotal").asDouble();
     }
 
     public static ClientModel getClientFromJson(JsonNode json, VendedorModel vendedor) {
@@ -153,5 +167,36 @@ public class JsonParser {
         json.put("id_gerente", vendedorModel.getId_gerente().getId_gerente());
 
         return json;
+    }
+
+    public static PaymentModel paymentFromJson(JsonNode json) {
+        JsonNode paymentJson = json.get("paymentDetails");
+
+        String paymentMethod = paymentJson.get("paymentMethod").asText();
+
+        if(!paymentJson.get("cashPaymentDetails").isNull()){
+            Double amount = paymentJson.get("cashPaymentDetails").get("amount").asDouble();
+            Double returned = paymentJson.get("cashPaymentDetails").get("returned").asDouble();
+
+            return new PaymentModel(
+                    paymentMethod,
+                    amount, returned,
+                    null, null, null, null
+            );
+        }
+
+        if(!paymentJson.get("cardDetails").isNull()){
+            String number = paymentJson.get("cardDetails").get("number").asText();
+            String name = paymentJson.get("cardDetails").get("name").asText();
+            String securityCode = paymentJson.get("cardDetails").get("securityCode").asText();
+            String expirationDate = paymentJson.get("cardDetails").get("expirationDate").asText();
+
+            return new PaymentModel(
+                    paymentMethod,
+                    null, null,
+                    number, name, securityCode, expirationDate
+            );
+        }
+        return new PaymentModel();
     }
 }

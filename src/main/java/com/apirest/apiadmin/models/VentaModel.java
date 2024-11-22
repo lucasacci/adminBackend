@@ -30,6 +30,10 @@ public class VentaModel {
     @JoinColumn(name = "id_cliente")
     private ClientModel cliente;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idPayment")
+    private PaymentModel payment;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "venta")
     private List<LineVentaModel> lineasDeVenta = new ArrayList<LineVentaModel>();
 
@@ -39,17 +43,18 @@ public class VentaModel {
     @Column
     private String Operation;
 
-    public VentaModel(Date fechaVenta, Double montoTotal, VendedorModel vendedor, ClientModel cliente){
+    public VentaModel(Date fechaVenta, Double montoTotal, VendedorModel vendedor, ClientModel cliente, PaymentModel payment){
         this.fechaVenta = fechaVenta;
         this.montoTotal = montoTotal;
         this.vendedor = vendedor;
         this.cliente = cliente;
+        this.payment = payment;
     }
 
     public VentaModel(){}
 
-    public void agregarProducto(ProductoModel producto) {
-        LineVentaModel linea = new LineVentaModel(producto.getPrecio(),this,producto);
+    public void agregarProducto(ProductoModel producto, Integer count, Double subtotal) {
+        LineVentaModel linea = new LineVentaModel(producto.getPrecio(), count, subtotal, this, producto);
         this.lineasDeVenta.add(linea);
     }
 

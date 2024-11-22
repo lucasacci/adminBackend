@@ -25,20 +25,30 @@ public class LineVentaModel {
     private ProductoModel producto;
 
     @Column
+    private Integer count;
+
+    @Column
+    private Double subTotal;
+
+    @Column
     private LocalDateTime dateEvent;
 
     @Column
     private String Operation;
 
-    public LineVentaModel(Double precioVenta, VentaModel venta, ProductoModel producto){
+    public LineVentaModel(Double precioVenta, Integer count, Double subtotal, VentaModel venta, ProductoModel producto){
         this.precioVenta = precioVenta;
         this.venta = venta;
         this.producto = producto;
+        this.count = count;
+        this.subTotal = subtotal;
     }
 
-    public LineVentaModel(Double precioVenta, ProductoModel producto){
+    public LineVentaModel(Double precioVenta, Integer count, Double subtotal, ProductoModel producto){
         this.precioVenta = precioVenta;
         this.producto = producto;
+        this.count = count;
+        this.subTotal = subtotal;
     }
 
     public LineVentaModel(){}
