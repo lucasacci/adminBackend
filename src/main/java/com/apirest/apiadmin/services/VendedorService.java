@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,8 +16,8 @@ public class VendedorService {
     @Autowired
     IVendedorRepository vendedorRepository;
 
-    public ArrayList<VendedorModel> getVendedores() {
-        return (ArrayList<VendedorModel>) vendedorRepository.findAll();
+    public List<VendedorModel> getVendedores() {
+        return new ArrayList<>(vendedorRepository.findAll());
     }
 
     public VendedorModel getVendedor(Long id) {

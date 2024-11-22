@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Notificación de Pago</title>
+</head>
+<body>
+<h2>Detalles de la Venta</h2>
+<p th:text="${body}">Aquí está el resumen de su compra:</p>
+<table border="1" cellspacing="0" cellpadding="5">
+    <thead>
+    <tr>
+        <th>ID Cliente</th>
+        <th>ID Producto</th>
+        <th>Nombre Producto</th>
+        <th>Categoría</th>
+        <th>Cantidad</th>
+        <th>Monto Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="detalle : ${detalles}">
+        <td th:text="${detalle.id_cliente}"></td>
+        <td th:text="${detalle.id_producto}"></td>
+        <td th:text="${detalle.nombre_producto}"></td>
+        <td th:text="${detalle.categoria}"></td>
+        <td th:text="${detalle.cantidad}"></td>
+        <td th:text="${detalle.monto_total}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

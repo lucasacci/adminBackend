@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,17 +28,52 @@ public class VendedorController {
     private GerenteService gerenteService;
 
     @GetMapping
-    public ResponseEntity<ArrayList<VendedorModel>> getVendedores() {
-        ArrayList<VendedorModel> vendedores = vendedorService.getVendedores();
-        return ResponseEntity.ok().body(vendedores);
+    public ResponseEntity<JsonNode> getVendedores() {
+        List<VendedorModel> vendedores = vendedorService.getVendedores();
+        List<JsonNode> vendedoresJson = new ArrayList<>();
+
+        try {
+            vendedores.forEach(vendedorModel -> {
+                vendedoresJson.add(JsonParser.vendedorToJson(vendedorModel));
+            });
+
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
+                    "Listado Vendedores.",
+                    vendedoresJson
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<Void> response = new ApiResponse<>(
+                    "Error al obtener Vendedores: " + e.getMessage(),
+                    null
+            );
+            JsonNode errorResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VendedorModel> getVendedor(@PathVariable Long id) {
-        Optional<VendedorModel> vendedor = Optional.ofNullable(vendedorService.getVendedor(id));
+    public ResponseEntity<JsonNode> getVendedor(@PathVariable Long id) {
+        try{
+            VendedorModel vendedor = vendedorService.getVendedor(id);
 
-        return vendedor.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Paciente encontrado",
+                    JsonParser.vendedorToJson(vendedor)
+            );
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.FOUND);
+        } catch (Exception e) {
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Error al buscar el paciente: " + e.getMessage(),
+                    null
+            );
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/crearvendedor")
