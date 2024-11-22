@@ -61,14 +61,14 @@ public class VendedorController {
             VendedorModel vendedor = vendedorService.getVendedor(id);
 
             ApiResponse<JsonNode> response = new ApiResponse<>(
-                    "Paciente encontrado",
+                    "Vendedor encontrado",
                     JsonParser.vendedorToJson(vendedor)
             );
             JsonNode jsonResponse = JsonParser.responseToJson(response);
             return new ResponseEntity<>(jsonResponse, HttpStatus.FOUND);
         } catch (Exception e) {
             ApiResponse<JsonNode> response = new ApiResponse<>(
-                    "Error al buscar el paciente: " + e.getMessage(),
+                    "Error al buscar el Vendedor: " + e.getMessage(),
                     null
             );
             JsonNode jsonResponse = JsonParser.responseToJson(response);
