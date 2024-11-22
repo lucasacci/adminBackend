@@ -1,33 +1,42 @@
+HTML
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Notificación de Pago</title>
+    <title>Detalle de Venta</title>
 </head>
 <body>
-<h2>Detalles de la Venta</h2>
-<p th:text="${body}">Aquí está el resumen de su compra:</p>
-<table border="1" cellspacing="0" cellpadding="5">
+<h1>Detalle de la Venta</h1>
+
+<p><strong>ID Venta:</strong> <span th:text="${venta.id}"></span></p>
+<p><strong>Fecha de la Venta:</strong> <span th:text="${venta.date}"></span></p>
+<p><strong>Vendedor:</strong> <span th:text="${venta.sellerName}"></span></p>
+<p><strong>Cliente:</strong> <span th:text="${venta.clientName}"></span></p>
+<p><strong>Total:</strong> $<span th:text="${venta.total}"></span></p>
+
+<h2>Detalles de las Líneas de Venta</h2>
+<table border="1">
     <thead>
     <tr>
-        <th>ID Cliente</th>
-        <th>ID Producto</th>
-        <th>Nombre Producto</th>
-        <th>Categoría</th>
+        <th>Producto</th>
         <th>Cantidad</th>
-        <th>Monto Total</th>
+        <th>Precio Unitario</th>
+        <th>Subtotal</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="detalle : ${detalles}">
-        <td th:text="${detalle.id_cliente}"></td>
-        <td th:text="${detalle.id_producto}"></td>
-        <td th:text="${detalle.nombre_producto}"></td>
-        <td th:text="${detalle.categoria}"></td>
-        <td th:text="${detalle.cantidad}"></td>
-        <td th:text="${detalle.monto_total}"></td>
+    <tr th:each="linea : ${venta.sellLines}">
+        <td th:text="${linea.product.name}"></td>
+        <td th:text="${linea.count}"></td>
+        <td th:text="${linea.product.precio}"></td>
+        <td th:text="${linea.subtotal}"></td>
     </tr>
     </tbody>
 </table>
+
+<h2>Detalles del Pago</h2>
+<p><strong>Método de Pago:</strong> <span th:text="${venta.paymentDetails.paymentMethod}"></span></p>
+<p><strong>Tarjeta:</strong> <span th:text="${venta.paymentDetails.cardDetails.number}"></span></p>
+<p><strong>Nombre en Tarjeta:</strong> <span th:text="${venta.paymentDetails.cardDetails.name}"></span></p>
+<p><strong>Fecha de Expiración:</strong> <span th:text="${venta.paymentDetails.cardDetails.expirationDate}"></span></p>
 </body>
 </html>

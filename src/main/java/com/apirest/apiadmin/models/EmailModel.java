@@ -5,6 +5,12 @@ public class EmailModel {
     private String subject;
     private String body;
 
+    public EmailModel(String mail_to, String subject, String body) {
+        this.mail_to = mail_to;
+        this.subject = subject;
+        this.body = body;
+    }
+
     public String getBody() {
         return body;
     }
