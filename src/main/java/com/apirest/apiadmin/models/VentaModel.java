@@ -37,6 +37,10 @@ public class VentaModel {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "venta")
     private List<LineVentaModel> lineasDeVenta = new ArrayList<LineVentaModel>();
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idDescuento")
+    private DescuentoModel descuento;
+
     @Column
     private LocalDateTime dateEvent;
 
@@ -143,5 +147,13 @@ public class VentaModel {
 
     public void setPayment(PaymentModel payment) {
         this.payment = payment;
+    }
+
+    public DescuentoModel getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(DescuentoModel descuento) {
+        this.descuento = descuento;
     }
 }

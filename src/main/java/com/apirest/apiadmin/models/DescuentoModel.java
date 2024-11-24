@@ -37,8 +37,6 @@ public class DescuentoModel {
     @Column
     private String Operation;
 
-    public DescuentoModel(){}
-
     public DescuentoModel(String descripcion, String porcentajeDescuento, Date fechaCaducidad, GerenteModel gerente){
         this.descripcion = descripcion;
         this.porcentajeDescuento = porcentajeDescuento;
@@ -46,6 +44,7 @@ public class DescuentoModel {
         this.gerente = gerente;
     }
 
+    public DescuentoModel(){}
 
     public boolean isValid() {
         Instant instant = Instant.now();

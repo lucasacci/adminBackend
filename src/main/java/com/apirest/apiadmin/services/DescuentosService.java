@@ -15,9 +15,6 @@ public class DescuentosService {
     @Autowired
     IDescuentosRepository descuentosRepository;
 
-    @Autowired
-    IGerenteRepository gerenteRepository;
-
     public String saveDescuento(DescuentoModel descuento) {
         try {
             descuentosRepository.save(descuento);
@@ -31,5 +28,9 @@ public class DescuentosService {
         List<DescuentoModel> descuentos = new ArrayList<>();
         descuentosRepository.findAll().forEach(descuentoModel -> {descuentos.add(descuentoModel);});
         return descuentos;
+    }
+
+    public DescuentoModel getDescuentoById(Long id){
+        return descuentosRepository.findById(id).get();
     }
 }
