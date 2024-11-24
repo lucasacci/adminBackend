@@ -6,5 +6,5 @@ import jakarta.mail.MessagingException;
 
 public interface IEmailService {
 
-    public void sendEmail(EmailModel email, JsonNode json) throws MessagingException;
+    public void sendEmail(EmailModel email, JsonNode json, String paymentMethod) throws MessagingException;
 }

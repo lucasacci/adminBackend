@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle de Venta</title>
+</head>
+<body>
+<h1>Detalle de la Venta</h1>
+
+<p><strong>ID Venta:</strong> <span th:text="${venta.id}"></span></p>
+<p><strong>Fecha de la Venta:</strong> <span th:text="${venta.date}"></span></p>
+<p><strong>Vendedor:</strong> <span th:text="${venta.sellerName}"></span></p>
+<p><strong>Cliente:</strong> <span th:text="${venta.clientName}"></span></p>
+<p><strong>Total:</strong> $<span th:text="${venta.total}"></span></p>
+
+<h2>Detalles de las Líneas de Venta</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>Subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="linea : ${venta.sellLines}">
+        <td th:text="${linea.productName}"></td>
+        <td th:text="${linea.count}"></td>
+        <td th:text="${linea.productPrecio}"></td>
+        <td th:text="${linea.subtotal}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Detalles del Pago</h2>
+<p><strong>Método de Pago:</strong> <span th:text="${venta.paymentDetails.paymentMethod}"></span></p>
+<p><strong>Pago efectivo:</strong> <span th:text="${venta.paymentDetails.cashPaymentDetails.amount}"></span></p>
+</body>
+</html>

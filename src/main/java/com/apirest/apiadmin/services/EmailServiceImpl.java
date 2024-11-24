@@ -26,7 +26,7 @@ public class EmailServiceImpl implements IEmailService {
     }
 
     @Override
-    public void sendEmail(EmailModel email, JsonNode venta) throws MessagingException {
+    public void sendEmail(EmailModel email, JsonNode venta, String paymentMethod) throws MessagingException {
         try {
             MimeMessage mimeMailMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMailMessage,
@@ -45,8 +45,16 @@ public class EmailServiceImpl implements IEmailService {
             Map<String, Object> ventaMap = objectMapper.convertValue(venta, Map.class);
             context.setVariable("venta", ventaMap);
 
+            String contenidoHtml;
+            if (paymentMethod.equals("Tarjeta")){
+                contenidoHtml = templateEngine.process("email_template", context);
+            } else if (paymentMethod.equals("Efectivo")){
+                contenidoHtml = templateEngine.process("email_template_cash", context);
+            } else {
+                throw new RuntimeException("La venta no tiene un metodo de pago");
+            }
 
-            String contenidoHtml = templateEngine.process("email_template", context);
+
 
             helper.setText(contenidoHtml, true);
             mailSender.send(mimeMailMessage);
