@@ -33,6 +33,9 @@ public class VentaRestController {
     @Autowired
     private EmailServiceImpl emailService;
 
+    @Autowired
+    private DescuentosService descuentosService;
+
     @PostMapping("/create")
     public ResponseEntity<JsonNode> crearVenta(@RequestBody JsonNode json) {
         try{
@@ -60,6 +63,13 @@ public class VentaRestController {
                 venta.agregarProducto(producto, count, subTotal);
             }
 
+            if (json.has("idDescuento") && !json.get("idDescuento").isNull()) {
+                venta.setDescuento(
+                        descuentosService.getDescuentoById(
+                                json.get("idDescuento").asLong())
+                );
+            }
+
             ventaService.guardarVenta(venta);
 
             //Pago
@@ -67,35 +77,32 @@ public class VentaRestController {
             String responsePay = exPay.pay();
 
 
-            //JsonNode jsonToEmail = JsonParser.addVentaNodeOnTop(JsonParser.ventaToEmailJson(venta)); //este tiene un: { venta: {informacion} }
-            JsonNode jsonToEmail = JsonParser.ventaToEmailJson(venta);
-
-            System.out.println(jsonToEmail.toPrettyString());
-
             //Envio de mail a Cliente
+            JsonNode jsonToEmail = JsonParser.ventaToEmailJson(venta);
             EmailModel email = new EmailModel(
                     cliente.getEmail(),
-                    "Notificacion de Pago - Sitema venta Admin",
-                    jsonToEmail.toPrettyString()
+                    "Notificacion de Pago - Sistema venta Admin",
+                    responsePay
             );
-            emailService.sendEmail(email,jsonToEmail);
+            emailService.sendEmail(
+                    email,
+                    jsonToEmail,
+                    venta.getPayment().getPaymentMethod()
+            );
 
+            //Response
             ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Venta Generada exitosamente",
                     null
             );
-
             JsonNode jsonResponse = JsonParser.responseToJson(response);
-
             return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
         } catch (Exception e) {
             ApiResponse<JsonNode> response = new ApiResponse<>(
                     "Error al Crear la venta. Ex:" + e.getMessage(),
                     null
             );
-
             JsonNode jsonResponse = JsonParser.responseToJson(response);
-
             return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
