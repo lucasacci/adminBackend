@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/ventas")
 public class VentaRestController {
@@ -107,4 +110,30 @@ public class VentaRestController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<JsonNode> getVentas(){
+        List<VentaModel> ventas = ventaService.listarventas();
+        List<JsonNode> ventasJson = new ArrayList<>();
+        try {
+            ventas.forEach( VentaModel -> {
+                ventasJson.add(JsonParser.ventaToEmailJson(VentaModel));
+            });
+
+            ApiResponse<List<JsonNode>> response = new ApiResponse<>(
+                    "Listado Ventas.",
+                    ventasJson
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<Void> response = new ApiResponse<>(
+                    "Error al obtener Ventas: " + e.getMessage(),
+                    null
+            );
+            JsonNode errorResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
