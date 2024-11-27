@@ -35,8 +35,8 @@ public class ProductoService {
         productoEditado.setCategoria(producto.getCategoria());
         productoEditado.setPrecio(producto.getPrecio());
         productoEditado.setStock(producto.getStock());
-        productoEditado.setImagen(producto.getImagen());
-//        productoEditado.setCantidad(producto.getCantidad());
+        //productoEditado.setImagen(producto.getImagen());
+        //productoEditado.setCantidad(producto.getCantidad());
 
        return productoRepository.save(productoEditado);
     }

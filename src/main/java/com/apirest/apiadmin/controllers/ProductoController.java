@@ -90,14 +90,37 @@ public class ProductoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> editarProducto(@PathVariable Integer id, @RequestBody ProductoModel producto) {
-        try{
-            ProductoModel updatedProducto = productoService.editProducto(producto, id);
-            return ResponseEntity.ok().body("Producto editado con exito.");
+    public ResponseEntity<JsonNode> editarProducto(@PathVariable Integer id, @RequestBody JsonNode json) {
+        try {
+            GerenteModel gerente = gerenteService.getGerente(json.get("id_gerente").asLong());
+
+            productoService.editProducto(
+                    JsonParser.getProductFromJson(json, gerente),
+                    id
+            );
+
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Producto/Servicio editado exitosamente.",
+                    null
+            );
+
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+
+            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado.");
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Producto/Servicio no encontrado. EX: " + e.getMessage(),
+                    null
+            );
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar");
+            ApiResponse<JsonNode> response = new ApiResponse<>(
+                    "Error al editar un producto/servicio. Ex: " + e.getMessage(),
+                    null
+            );
+            JsonNode jsonResponse = JsonParser.responseToJson(response);
+            return new ResponseEntity<>(jsonResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
