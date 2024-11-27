@@ -1,4 +1,6 @@
 HELP.md
+public/*
+src/main/python/__pycache__
 #src/main/resources/email.properties
 target/
 !.mvn/wrapper/maven-wrapper.jar
