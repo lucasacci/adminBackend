@@ -255,6 +255,39 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Edit Servicio by id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoria\": \"Service\",\r\n    \"nombre\": \"SAP HANA\",\r\n    \"precio\": 40000,\r\n    \"comentarios\": \"Tiempo de vida: 3 anios\",\r\n    \"id_gerente\": 1,\r\n    \"stock\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/productos/:id",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"productos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -283,6 +316,23 @@
 							"path": [
 								"ventas",
 								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ventas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/ventas",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"ventas"
 							]
 						}
 					},
