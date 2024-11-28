@@ -30,7 +30,7 @@ async def ping():
     return "pong"
 
 
-#example: https://pythonadmin.lunahri.net.ar/analizarVentasVendedor?fecha_inicio="2024-11-01 00:00:00"&fecha_fin="2024-12-01 00:00:00"&idVendedor=1&nombreVendedor="Nombre del vendedor"
+#example: https://pythonadmin.lunahri.net.ar/analizarVentasVendedor?fecha_inicio=2024-11-01 00:00:00&fecha_fin=2024-12-01 00:00:00&idVendedor=1&nombreVendedor=Nombre del vendedor
 @app.post("/analizarVentasVendedor")
 async def analizarVentasVendedor(
     fecha_inicio: str = None, 
@@ -45,6 +45,24 @@ async def analizarVentasVendedor(
             fecha_fin, 
             idVendedor, 
             nombreVendedor
+        )
+
+        return ResponseModel(url=url, exception=None)
+    except Exception as ex:
+        return ResponseModel(url=None, exception=str(ex))
+
+
+#example: https://pythonadmin.lunahri.net.ar/analizarVentasPorVendedores?fecha_inicio=2024-11-01 00:00:00&fecha_fin=2024-12-01 00:00:00
+@app.post("/analizarVentasPorVendedores")
+async def analizarVentasPorVendedores(
+    fecha_inicio: str = None, 
+    fecha_fin: str = None,
+) -> ResponseModel:
+
+    try:
+        url = analisisVentas.ventasPorVendedorPorPeriodo(
+            fecha_inicio, 
+            fecha_fin
         )
 
         return ResponseModel(url=url, exception=None)

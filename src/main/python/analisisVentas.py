@@ -64,21 +64,6 @@ def ventasVendedorPorPeriodo(fecha_inicio: str = None, fecha_fin: str = None, id
             ORDER BY 
 	            fecha
         '''
-        query2 = f'''
-            SELECT 
-                DATE(fecha_venta) AS fecha,
-                COUNT(*) AS ventas
-            FROM 
-                admin.ventas 
-            WHERE 
-                fecha_venta >= '2024-11-01 00:00:00' 
-                AND fecha_venta <= '2024-12-01 00:00:00'
-                AND id_vendedor = 1
-            GROUP BY 
-                DATE(fecha_venta)
-            ORDER BY 
-	            fecha
-        '''
         df_data_sql = pd.read_sql(query, engine)
         print(df_data_sql)
         
@@ -114,5 +99,73 @@ def ventasVendedorPorPeriodo(fecha_inicio: str = None, fecha_fin: str = None, id
     return f"https://pythonadmin.lunahri.net.ar/get-photo/{fileName}"
 
 
-#if __name__ == '__main__':
-#    ventasVendedorPorPeriodo()
+def ventasPorVendedorPorPeriodo(fecha_inicio: str = None, fecha_fin: str = None):
+
+    # Conexion a la db
+    try:
+        engine = get_sql_conection_engine()
+    except sqlalchemy.exc.SQLAlchemyError as e:
+        return e
+
+    # Query traer ventas de un vendedor en un periodo
+    try:
+        query = f'''
+            SELECT 
+                id_vendedor,
+                SUM(ventas) AS ventas
+            FROM (
+                SELECT 
+                    DATE(fecha_venta) AS fecha,
+                    id_vendedor,
+                    COUNT(*) AS ventas
+                FROM 
+                    admin.ventas
+                WHERE 
+                    fecha_venta >= '2024-11-01 00:00:00' 
+                    AND fecha_venta <= '2024-12-01 00:00:00'
+                GROUP BY 
+                    DATE(fecha_venta),
+                    id_vendedor
+            ) AS subquery
+            GROUP BY 
+                id_vendedor
+            ORDER BY 
+                id_vendedor
+        '''
+        df_data_sql = pd.read_sql(query, engine)
+        print(df_data_sql)
+        
+        #Cerrar Conexion DB
+        if engine:
+            engine.dispose()
+            print("conexion cerrada")
+
+    except Exception as e:
+        return e
+
+    # Generar Histograma con Seaborn
+    try:
+
+        plt.figure(figsize=(10, 6))
+        sns.barplot(data=df_data_sql, x="id_vendedor", y="ventas", hue="id_vendedor", palette="coolwarm", legend=False)
+        plt.xlabel("Vendedor")
+        plt.ylabel("Ventas Totales")
+        plt.title(f"Ventas Totales por Vendedor")
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+
+        timestamp = time.time()
+        fileName = f'img-{fecha_fin}_to_{fecha_fin}-from_vendedores-time_{timestamp}.png'
+        fileName = fileName.replace(' ', '_')
+        fileName = fileName.replace(':', '-')
+
+        plt.savefig(f'public/{fileName}')
+        
+        #plt.show()
+    except Exception as e:
+        return e
+
+    return f"https://pythonadmin.lunahri.net.ar/get-photo/{fileName}"
+
+if __name__ == '__main__':
+    ventasPorVendedorPorPeriodo()
