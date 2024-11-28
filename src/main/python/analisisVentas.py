@@ -7,7 +7,7 @@ from sqlalchemy.engine import Engine
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import mpld3
+import time
 
 
 def get_sql_conection_engine(server: str = None, database: str = None, username: str = None, password: str = None) -> Engine:
@@ -39,23 +39,40 @@ def get_sql_conection_engine(server: str = None, database: str = None, username:
 
 
 
-def ventasVendedorPorPeriodo(fecha_inicio: datetime = None, fecha_fin: datetime = None, idVendedor: int = None):
+def ventasVendedorPorPeriodo(fecha_inicio: str = None, fecha_fin: str = None, idVendedor: int = None, nombreVendedor: str = None):
 
     # Conexion a la db
     try:
         engine = get_sql_conection_engine()
     except sqlalchemy.exc.SQLAlchemyError as e:
-        print(f"Error al inicializar la conexión a SQL Server: {str(e)}")
-        raise
+        return e
 
     # Query traer ventas de un vendedor en un periodo
     try:
-        query = '''
-            SELECT DATE(fecha_venta) AS fecha,
-                    COUNT(*) as ventas
-            FROM admin.ventas 
-            WHERE fecha_venta >= '2024-11-01 00:00:00' 
-                AND fecha_venta <= '2024-11-30 00:00:00'
+        query = f'''
+            SELECT 
+                DATE(fecha_venta) AS fecha,
+                COUNT(*) AS ventas
+            FROM 
+                admin.ventas 
+            WHERE 
+                fecha_venta >= '{fecha_inicio}' 
+                AND fecha_venta <= '{fecha_fin}'
+                AND id_vendedor = {idVendedor}
+            GROUP BY 
+                DATE(fecha_venta)
+            ORDER BY 
+	            fecha
+        '''
+        query2 = f'''
+            SELECT 
+                DATE(fecha_venta) AS fecha,
+                COUNT(*) AS ventas
+            FROM 
+                admin.ventas 
+            WHERE 
+                fecha_venta >= '2024-11-01 00:00:00' 
+                AND fecha_venta <= '2024-12-01 00:00:00'
                 AND id_vendedor = 1
             GROUP BY 
                 DATE(fecha_venta)
@@ -71,22 +88,31 @@ def ventasVendedorPorPeriodo(fecha_inicio: datetime = None, fecha_fin: datetime 
             print("conexion cerrada")
 
     except Exception as e:
-        print("error al Ejecutar el query")
+        return e
 
     # Generar Histograma con Seaborn
     try:
         plt.figure(figsize=(10, 6))
-        sns.barplot(data=df_data_sql, x="fecha", y="ventas", palette="viridis")
+        sns.barplot(data=df_data_sql, x="fecha", y="ventas", hue="fecha", palette="viridis", legend=False)
         plt.xlabel("Fecha")
         plt.ylabel("Ventas")
-        plt.title(f"Ventas por día para el vendedor {idVendedor}")
-        plt.xticks(rotation=45)  # Rotar etiquetas de fecha para legibilidad
+        plt.title(f"Ventas por día para el vendedor {nombreVendedor}")
+        plt.xticks(rotation=45)
         plt.tight_layout()
-        plt.savefig('public/file.png')
+
+        timestamp = time.time()
+        fileName = f'img-{fecha_fin}_to_{fecha_fin}-from_id_{idVendedor}_name_{nombreVendedor}-time_{timestamp}.png'
+        fileName = fileName.replace(' ', '_')
+        fileName = fileName.replace(':', '-')
+
+        plt.savefig(f'public/{fileName}')
+        
         #plt.show()
     except Exception as e:
-        print("Error al generar el histograma:", str(e))
+        return e
+
+    return f"https://pythonadmin.lunahri.net.ar/get-photo/{fileName}"
 
 
-if __name__ == '__main__':
-    ventasVendedorPorPeriodo()
+#if __name__ == '__main__':
+#    ventasVendedorPorPeriodo()

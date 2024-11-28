@@ -4,6 +4,8 @@ from fastapi.exceptions import HTTPException
 import uvicorn
 import logging
 from pathlib import Path
+from pydantic import BaseModel
+import analisisVentas
 
 app = FastAPI(title= 'API Admin',
               description= 'Analisis de ventas',
@@ -14,11 +16,43 @@ logger = logging.getLogger(__name__)
 
 UPLOAD_FOLDER = Path("public")
 
+class ResponseModel(BaseModel):
+    url: str | None
+    exception: str | None
+
+
+#Docs: https://pythonadmin.lunahri.net.ar/docs
+
+#example: https://pythonadmin.lunahri.net.ar/
 @app.get("/")
 async def ping():
     logger.info("hola")
     return "pong"
 
+
+#example: https://pythonadmin.lunahri.net.ar/analizarVentasVendedor?fecha_inicio="2024-11-01 00:00:00"&fecha_fin="2024-12-01 00:00:00"&idVendedor=1&nombreVendedor="Nombre del vendedor"
+@app.post("/analizarVentasVendedor")
+async def analizarVentasVendedor(
+    fecha_inicio: str = None, 
+    fecha_fin: str = None, 
+    idVendedor: int = None, 
+    nombreVendedor: str = None
+) -> ResponseModel:
+
+    try:
+        url = analisisVentas.ventasVendedorPorPeriodo(
+            fecha_inicio, 
+            fecha_fin, 
+            idVendedor, 
+            nombreVendedor
+        )
+
+        return ResponseModel(url=url, exception=None)
+    except Exception as ex:
+        return ResponseModel(url=None, exception=str(ex))
+
+
+#example: https://pythonadmin.lunahri.net.ar/get-photo/
 @app.get("/get-photo/{filename}")
 async def get_photo(filename: str = None):
     logger.info(filename)
