@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 import time
 
 
+basePath = '/home/lubuntu/public/'
+#basePath = 'public/'
+
 def get_sql_conection_engine(server: str = None, database: str = None, username: str = None, password: str = None) -> Engine:
     try:
         connection_url = sqlalchemy.URL.create(
@@ -90,7 +93,7 @@ def ventasVendedorPorPeriodo(fecha_inicio: str = None, fecha_fin: str = None, id
         fileName = fileName.replace(' ', '_')
         fileName = fileName.replace(':', '-')
 
-        plt.savefig(f'public/{fileName}')
+        plt.savefig(basePath + f'{fileName}')
         
         #plt.show()
     except Exception as e:
@@ -159,7 +162,7 @@ def ventasPorVendedorPorPeriodo(fecha_inicio: str = None, fecha_fin: str = None)
         fileName = fileName.replace(' ', '_')
         fileName = fileName.replace(':', '-')
 
-        plt.savefig(f'public/{fileName}')
+        plt.savefig(basePath + f'{fileName}')
         
         #plt.show()
     except Exception as e:

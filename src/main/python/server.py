@@ -14,7 +14,8 @@ app = FastAPI(title= 'API Admin',
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-UPLOAD_FOLDER = Path("public")
+UPLOAD_FOLDER = Path("/home/lubuntu/public")
+#UPLOAD_FOLDER = Path("public")
 
 class ResponseModel(BaseModel):
     url: str | None
@@ -85,7 +86,7 @@ async def get_photo(filename: str = None):
 if __name__ == "__main__":
     # ----------------------------------------
     try:
-        config = uvicorn.Config(f"{__name__}:app",port=8083, host='192.168.1.35')
+        config = uvicorn.Config(f"{__name__}:app",port=8083, host='192.168.1.42')
         server = uvicorn.Server(config)
         server.run()
     except Exception as ex:  
