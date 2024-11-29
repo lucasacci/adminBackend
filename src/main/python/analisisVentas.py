@@ -126,8 +126,8 @@ def ventasPorVendedorPorPeriodo(fecha_inicio: str = None, fecha_fin: str = None)
                 FROM 
                     admin.ventas
                 WHERE 
-                    fecha_venta >= '2024-11-01 00:00:00' 
-                    AND fecha_venta <= '2024-12-01 00:00:00'
+                    fecha_venta >= '{fecha_inicio}' 
+                    AND fecha_venta <= '{fecha_fin}'
                 GROUP BY 
                     DATE(fecha_venta),
                     id_vendedor
