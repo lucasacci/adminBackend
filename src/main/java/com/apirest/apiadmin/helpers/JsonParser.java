@@ -7,8 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -35,14 +38,7 @@ public class JsonParser {
     public static DescuentoModel descuentoFromJson(JsonNode json, GerenteModel gerente) {
         String descripcion         = json.get("descripcion").asText();
         String porcentajeDescuento = json.get("porcentajeDescuento").asText();
-
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Date fechaCaducidad = null;
-        try {
-            fechaCaducidad = formatoFecha.parse(json.get("fechaCaducidad").asText());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Instant fechaCaducidad = Instant.ofEpochSecond(json.get("fechaCaducidad").asLong());
 
         DescuentoModel descuento = new DescuentoModel(
                 descripcion,
@@ -60,7 +56,7 @@ public class JsonParser {
         json.put("idDescuento", descuentoModel.getIdDescuento());
         json.put("descripcion", descuentoModel.getDescripcion());
         json.put("porcentajeDescuento", descuentoModel.getPorcentajeDescuento());
-        json.put("fechaCaducidad", descuentoModel.getFechaCaducidad().toString());
+        json.put("fechaCaducidad", descuentoModel.getFechaCaducidad().toEpochMilli());
         json.put("idGerente", descuentoModel.getGerente().getId_gerente());
 
         return json;
