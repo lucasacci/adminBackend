@@ -3,6 +3,7 @@ package com.apirest.apiadmin.models;
 import com.apirest.apiadmin.listeners.AuditDescuentoListener;
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -25,7 +26,7 @@ public class DescuentoModel {
     private String porcentajeDescuento;
 
     @Column
-    private Date fechaCaducidad;
+    private Instant fechaCaducidad;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_gerente")
@@ -37,7 +38,11 @@ public class DescuentoModel {
     @Column
     private String Operation;
 
-    public DescuentoModel(String descripcion, String porcentajeDescuento, Date fechaCaducidad, GerenteModel gerente){
+    public DescuentoModel(
+            String descripcion,
+            String porcentajeDescuento,
+            Instant fechaCaducidad,
+            GerenteModel gerente){
         this.descripcion = descripcion;
         this.porcentajeDescuento = porcentajeDescuento;
         this.fechaCaducidad = fechaCaducidad;
@@ -51,7 +56,7 @@ public class DescuentoModel {
         ZoneId z = ZoneId.of( "America/Argentina/Tucuman" );
         ZonedDateTime zdt = instant.atZone(z);
 
-        if (zdt.isAfter(fechaCaducidad.toInstant().atZone(z))){
+        if (zdt.isAfter(fechaCaducidad.atZone(z))){
             return false;
         }
         return true;
@@ -100,10 +105,6 @@ public class DescuentoModel {
         return porcentajeDescuento;
     }
 
-    public Date getFechaCaducidad() {
-        return fechaCaducidad;
-    }
-
     public GerenteModel getGerente() {
         return gerente;
     }
@@ -120,11 +121,15 @@ public class DescuentoModel {
         this.porcentajeDescuento = porcentajeDescuento;
     }
 
-    public void setFechaCaducidad(Date fechaCaducidad) {
-        this.fechaCaducidad = fechaCaducidad;
-    }
-
     public void setGerente(GerenteModel gerente) {
         this.gerente = gerente;
+    }
+
+    public Instant getFechaCaducidad() {
+        return fechaCaducidad;
+    }
+
+    public void setFechaCaducidad(Instant fechaCaducidad) {
+        this.fechaCaducidad = fechaCaducidad;
     }
 }
